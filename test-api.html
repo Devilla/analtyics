@@ -44,23 +44,6 @@
             escape.innerHTML = html;
             return escape.value;
         }
-
-        /*var scribe = new Scribe({
-          bucket: 'none',
-          tracker: function(opts) {
-            var path  = opts.path;
-            var value = opts.value;
-
-            var div = document.createElement('DIV');
-
-            div.innerHTML += '<p class="path">' + path + '</p>';
-            div.innerHTML += '<pre class="event">' + escapeHTML(JSON.stringify(value, null, '  ')) + '</pre>';
-
-            document.body.appendChild(div);
-          }
-        });*/
-
-
         new Influence({
           trackingId:   'INF-XXXXXXX'
         });
