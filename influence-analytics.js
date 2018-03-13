@@ -1130,7 +1130,7 @@ if (typeof Influence === 'undefined') {
             }
 
             // Track page view
-            if(this.options.trackPageView) {
+            if(this.options.trackPageViews) {
                 Events.onready(function() {
                     // Track page view, but only after the DOM has loaded:
                     self.pageview();
@@ -3837,7 +3837,7 @@ InfluenceTracker.prototype.tracker = function(info) {
         var params = path + value;
         http.open("POST", url, true);
 
-//Send the proper header information along with the request
+        //Send the proper header information along with the request
         http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         http.onreadystatechange = function() {//Call a function when the state changes.
