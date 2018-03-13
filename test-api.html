@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Influence Analytics Test Suite</title>
+    <link rel="stylesheet" href="nodeunit.css" type="text/css" />
+
+    <script src="influence-analytics.js"></script>
+
+    <script type="text/javascript">
+        var preventDefault = function(e) {
+            e.preventDefault();
+            return false;
+        }
+    </script>
+  </head>
+  <body>
+    <h1 id="nodeunit-header">Influence Analytics Test Suite</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+    <p>Sed sed euismod nisl. Nam vel risus nisi, a fermentum arcu. In accumsan, magna sed gravida tincidunt, leo tellus semper nisl, sit amet dictum odio orci id erat. Quisque pulvinar vestibulum nisl eget mollis. Aenean pretium, sapien at vulputate dapibus, tellus libero elementum lorem, vitae vehicula sapien nisi tristique enim. Sed magna orci, volutpat vel commodo at, accumsan eu nulla. Mauris congue adipiscing ipsum vel vehicula. Duis imperdiet suscipit justo dignissim consectetur. Aliquam erat volutpat.</p>
+
+    <a href="test-api.html?q=super%20duper%20query"><h2>Query Parameters</h2></a>
+
+    <form method="get" action="./test-api.html?q=123">
+      <label for="name">Name:</label><input type="text" name="name"></input>
+      <label for="email">Email:</label><input type="email" name="email"></input>
+      <input type="button" value="Button Submit"></input>
+      <input type="submit" name="Normal Submit"></input>
+    </form>
+
+    <a href="#nodeunit-header"><h2>Jump to Top</h2></a>
+
+    <a href="#nodeunit-header" onclick="preventDefault"><h2>Jump to Top (Prevent Default)</h2></a>
+
+    <script>
+        function escapeHTML(html) {
+            var escape = document.createElement('textarea');
+            escape.innerHTML = html;
+            return escape.innerHTML;
+        }
+
+        function unescapeHTML(html) {
+            var escape = document.createElement('textarea');
+            escape.innerHTML = html;
+            return escape.value;
+        }
+
+        /*var scribe = new Scribe({
+          bucket: 'none',
+          tracker: function(opts) {
+            var path  = opts.path;
+            var value = opts.value;
+
+            var div = document.createElement('DIV');
+
+            div.innerHTML += '<p class="path">' + path + '</p>';
+            div.innerHTML += '<pre class="event">' + escapeHTML(JSON.stringify(value, null, '  ')) + '</pre>';
+
+            document.body.appendChild(div);
+          }
+        });*/
+
+
+        new Influence({
+          trackingId:   'INF-XXXXXXX'
+        });
+    </script>
+  </body>
+</html>
