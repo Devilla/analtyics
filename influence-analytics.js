@@ -3832,20 +3832,53 @@ InfluenceTracker.prototype.tracker = function(info) {
         console.log(value);
 
         // Send data to the backend
-        var http = new XMLHttpRequest();
-        var url = "enterinfluenceurl";
-        var params = path + value;
-        http.open("POST", url, true);
+        var data = {}
+
+
+        data.path = path;
+        data.value = value;
+
+
 
         //Send the proper header information along with the request
-        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-        http.onreadystatechange = function() {//Call a function when the state changes.
-            if(http.readyState == 4 && http.status == 200) {
-                alert(http.responseText);
+          if ("WebSocket" in window)
+            {
+               console.log("WebSocket is supported by your Browser!");
+
+               // Let us open a web socket
+               var ws = new WebSocket("ws://localhost:1337/web");
+
+               ws.onopen = function()
+               {
+                  // Web Socket is connected, send data using send()
+                  ws.send(JSON.stringify(data));
+                  ocalStorage.setItem('influence_data',JSON.stringify(data));
+                  console.log("Message is sent...",data);
+               };
+
+               ws.onmessage = function (evt)
+               {
+                  var received_msg = evt.data;
+                  console.log("Message is received...");
+               };
+
+               ws.onclose = function()
+               {
+                  // websocket is closed.
+                  console.log("Connection is closed...");
+               };
+
+               window.onbeforeunload = function(event) {
+                  socket.close();
+               };
             }
-        }
-        http.send(params);
+
+            else
+            {
+               // The browser doesn't support WebSocket
+               console.log("WebSocket NOT supported by your Browser!");
+            }
 
 
         info.success && setTimeout(info.success, 0);
@@ -3854,6 +3887,12 @@ InfluenceTracker.prototype.tracker = function(info) {
     }
 };
 
+//Basic idea is to implement the toasterJS here so, that
+/**WE fetch from the API say /sendSomeNotification?trackingId=INF-XXXXX;
+**  We get Some Notifications and then we use toastrJs to display them/
+**/
+
+
+
 nodeunit = typeof nodeunit === 'undefined' ? require('nodeunit') : nodeunit;
 Influence = typeof Influence === 'undefined' ? require('..') : Influence;
-
