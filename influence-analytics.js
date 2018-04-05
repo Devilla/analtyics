@@ -3847,13 +3847,12 @@ InfluenceTracker.prototype.tracker = function(info) {
                console.log("WebSocket is supported by your Browser!");
 
                // Let us open a web socket
-               var ws = new WebSocket("ws://localhost:1337/web");
+               var ws = new WebSocket("ws://strapi.useinfluence.co/web");
 
                ws.onopen = function()
                {
                   // Web Socket is connected, send data using send()
                   ws.send(JSON.stringify(data));
-                  ocalStorage.setItem('influence_data',JSON.stringify(data));
                   console.log("Message is sent...",data);
                };
 
