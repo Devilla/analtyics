@@ -3847,7 +3847,7 @@ InfluenceTracker.prototype.tracker = function(info) {
                console.log("WebSocket is supported by your Browser!");
 
                // Let us open a web socket
-               var ws = new WebSocket("ws://strapi.useinfluence.co/web");
+               var ws = new WebSocket("wss://strapi.useinfluence.co/web");
 
                ws.onopen = function()
                {
