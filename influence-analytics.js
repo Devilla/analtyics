@@ -3839,26 +3839,36 @@ var Notifications = function(config) {
   this.config = config;
   console.log("This is notifications " + config);
 
+  //Retrieve Notifications
+  var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + 'INF-azg2fh7ljjg6xlt5j' + '?type=live';
+  httpGetAsync(url, function(res) {
+    response = JSON.parse(res)
+    if (!response.message.error){
+      console.log(response);
+      var note = new Note({});
+      // We will work on the notification later on.
+      note.info("Live!", "There are " + response.message.response.hits.total + " current Visitors",  { duration: 5 });
+    }else {
+      console.log('Send data to us using websocket ')
+    }
+  });
+
+
+
+
 };
 
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
+    xmlHttp.send(null);
+}
 
-Notifications.prototype.notifications = function(info) {
-
-    /**
-    **Here all the action related to the notifications
-    */
-
-    /** Basic idea is to implement the toasterJS here so, that
-    /** WE fetch from the API say /sendSomeNotification?trackingId=INF-XXXXX;
-    **  We get Some Notifications and then we use toastrJs to display them/
-    **/
-  console.log(info)
-
-  var note = new Note({});
-  note.info("Hey!", "I'm leaving in 5 seconds", { duration: 5 });
-
-
-};
 
 InfluenceTracker.prototype.tracker = function(info) {
     console.log(info);
@@ -3885,7 +3895,7 @@ InfluenceTracker.prototype.tracker = function(info) {
                console.log("WebSocket is supported by your Browser!");
 
                // Let us open a web socket
-               var ws = new WebSocket("ws://localhost/web");
+               var ws = new WebSocket("wss://strapi.useinfluence.co/web");
 
                ws.onopen = function()
                {
