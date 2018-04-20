@@ -3840,7 +3840,7 @@ var Notifications = function(config) {
   console.log("This is notifications " + config);
 
   //Retrieve Notifications
-  var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + 'INF-azg2fh7ljjg6xlt5j' + '?type=live';
+  var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type=live';
   httpGetAsync(url, function(res) {
     response = JSON.parse(res)
     if (!response.message.error){
