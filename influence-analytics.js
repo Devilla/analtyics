@@ -3838,78 +3838,36 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   console.log("This is notifications " + config);
-  liveCssFunction();
 
-  //Retrieve Notifications
-  var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type=live';
-  httpGetAsync(url, function(res) {
-    response = JSON.parse(res)
-    if (!response.message.error){
-      console.log(response);
-      var note = new Note({});
-      // We will work on the notification later on.
-      note.info("Live!", "There are " + response.message.response.hits.total + " current Visitors",  { duration: 5 });
-    }else {
-      console.log('Send data to us using websocket ')
-    }
-  });
+  var splittedUrls = ["live", "identification", "journey"];
+
+  function loopThroughSplittedNotifications(splittedUrls) {
+      for (var i = 0; i < splittedUrls.length; i++) {
+          (function (i) {
+              setTimeout(function () {
+                var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
+                  console.log(url);
+                  httpGetAsync(url, function(res) {
+                    response = JSON.parse(res)
+                    if (!response.message.error) {
+                      console.log(response);
+                      var note = new Note({});
+                      // We will work on the notification later on.
+                      note[splittedUrls[i]](response.message , { duration: 5 });
+                    } else {
+                      console.log('Send data to us using websocket ')
+                    }
+                  });
+              }, 10000 * i);
+          })(i);
+      };
+  }
+
+  loopThroughSplittedNotifications(splittedUrls);
+
 };
 
-function liveCssFunction() {
-        var container = document.createElement('div');
-        container.setAttribute("id","notification-container")
-        container.style = "visibility: visible;display: flex;min-width: 20%;margin-left: -25%;height: 72px;background-color: white;color: black;text-align: center;border-radius: 2px;padding: 0px 0px;position: fixed;z-index: 1;left: 100%;bottom: 30px;font-size: 17px;border: 1px solid lightgray;border-radius: 45px;box-shadow: 1px 1px lightgrey;font-family: sans-serif;font-weight: 100;"
-          var icon = document.createElement('div');
-            var icon_p = document.createElement('p');
-            icon_p.onmouseover = function() {
-              icon_p.style.boxShadow= '0px 0px 30px 0px rgba(232, 0, 0, 0.67)';
-              icon_p.style.borderRadius= '30px';
-            }
-            icon_p.onmouseout = function() {
-              icon_p.style.boxShadow= '0px 0px 0px 0px transparent';
-              icon_p.style.borderRadius= '50%';
-            }
-            icon_p.style = "height: 35px;width: 35px;margin-left: 15px;margin-right: 15px;background-color: #2f95f7;border-radius: 50%;display: inline-block;";
-            icon.appendChild(icon_p);
-          var content = document.createElement('div');
-            content.style = "width: 220px;height: 65px;font-size: smaller;padding: 6px 18px;";
-            var content_p = document.createElement('p');
-              content_p.style = "text-align: left;margin-bottom: 0;";
-                var p_span = document.createElement('span');
-                p_span.style = "color: #2f95f7;";
-                p_span.innerHTML = "235 people ";
-                var text_span = document.createTextNode("are viewing this site");
-              content_p.appendChild(p_span);
-              content_p.appendChild(text_span);
-            var content_div = document.createElement('div');
-              content_div.style = "margin: 0;font-size: small;text-align: left;display: flex;";
-              var verified_pre = document.createElement('pre');
-                verified_pre.style = "color: lightgray;margin: 0;font-family: sans-serif;";
-                verified_pre.innerHTML = "verified by ";
-              var div_pre = document.createElement('pre');
-                div_pre.style = "margin: 0;font-family: sans-serif;";
-                div_pre.innerHTML = "Influence";
-              content_div.appendChild(verified_pre);
-              content_div.appendChild(div_pre);
-            content.appendChild(content_p);
-            content.appendChild(content_div);
-          container.appendChild(icon);
-          container.appendChild(content);
-          container.animate([
-            { transform: 'translateX(500px)' },
-            { transform: 'translateX(0px)' }
-          ], {
-            duration: 1000,
-          });
-          setTimeout(function(){
-            container.style.visibility = "hidden";
-          }, 3000);
-        document.body.appendChild(container);
-      };
-
-
-function httpGetAsync(theUrl, callback)
-{
+function httpGetAsync(theUrl, callback) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -3985,116 +3943,135 @@ InfluenceTracker.prototype.tracker = function(info) {
 };
 
 var Note = function Note(config) {
-    var self = this;
 
-    function createElement(node, className, content) {
-        var e = document.createElement(node);
-        if (className) e.className = className;
+    function liveNotification(text, config) {
+      var container = document.createElement('div');
+      container.setAttribute("id", "notification-container");
+        var icon = document.createElement('div');
+          var icon_p = document.createElement('p');
+            icon_p.className = "dot";
+            icon.appendChild(icon_p);
+        var content = document.createElement('div');
+          content.className = "content";
+          var content_p = document.createElement('p');
+            content_p.className = "heading";
+            var p_span = document.createElement('span');
+              p_span.className = "peopleCount";
+              p_span.innerHTML = text.response.hits.total;
+            var text_span = document.createTextNode(" are viewing this site");
+          content_p.appendChild(p_span);
+          content_p.appendChild(text_span);
+          var content_div = document.createElement('div');
+            content_div.className = "verified";
+            var verified_pre = document.createElement('pre');
+              verified_pre.className = "verified-content";
+              verified_pre.innerHTML = "verified by ";
+            var div_pre = document.createElement('pre');
+              div_pre.className = "verified-content-influence";
+              div_pre.innerHTML = "Influence";
+          content_div.appendChild(verified_pre);
+          content_div.appendChild(div_pre);
+        content.appendChild(content_p);
+        content.appendChild(content_div);
+      container.appendChild(icon);
+      container.appendChild(content);
+      displayNotification(container);
+    };
 
-        if (content) {
-            if (typeof content === "string") e.innerHTML = content;else if (content.nodeName) e.appendChild(content);
-        }
+    function signUpNotification(text, config) {
+      var container = document.createElement('div');
+      container.setAttribute("id","notification-container")
+        var icon = document.createElement('div');
+          var icon_p = document.createElement('p');
+          icon_p.className = "dot";
+          icon.appendChild(icon_p);
+        var content = document.createElement('div');
+        content.className = "content";
+        var content_p = document.createElement('p');
+          content_p.className = "heading";
+            var p_span = document.createElement('span');
+            p_span.className = "peopleCount";
+            p_span.style = "color: #2f95f7;";
+            p_span.innerHTML = text.response.hits.total;
+            var text_span = document.createTextNode(" signed up for");
+          content_p.appendChild(p_span);
+          content_p.appendChild(text_span);
+        var content_div = document.createElement('div');
+        content_div.className = "verified";
+          var div_pre = document.createElement('pre');
+            div_pre.innerHTML = "Influence in the last 7 days";
+          content_div.appendChild(div_pre);
+        content.appendChild(content_p);
+        content.appendChild(content_div);
+      container.appendChild(icon);
+      container.appendChild(content);
+      displayNotification(container);
+    };
 
-        return e;
+    function recentNotification(text, config) {
+      var container = document.createElement('div');
+      container.setAttribute("id", "notification-container");
+        var icon = document.createElement('div');
+          var icon_p = document.createElement('img');
+          icon_p.className = "icon-img";
+          icon_p.src = "https://media1.popsugar-assets.com/files/thumbor/f6mR3MTC66MfnZFc0qGrgcnZ_fg/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2017/12/19/048/n/1922441/tmp_f17bIy_7aef35b1ab387138_k.jpg";
+          icon.appendChild(icon_p);
+        var content = document.createElement('div');
+        content.className = "recent-content";
+          var content_heading = document.createElement('p');
+            content_heading.className = "recent-heading";
+            content_heading.innerHTML = "Nataila from Itaboral, RJ";
+          var content_verified = document.createElement('div');
+            content_verified.className = "recent-verified";
+            var div_pre = document.createElement('pre');
+              div_pre.className = "verified-content-pre";
+              div_pre.innerHTML = "Recently signed up for Influence";
+            var verified_bottom = document.createElement('div');
+              verified_bottom.className = "verified-bottom";
+              var verified_content = document.createElement('pre');
+                verified_content.className = "verified-content";
+                verified_content.innerHTML = "an hour ago ";
+              var verified_pre = document.createElement('pre');
+                verified_pre.className = "verified-content-pre";
+                verified_pre.innerHTML = " by Influence";
+            verified_bottom.appendChild(verified_content);
+            verified_bottom.appendChild(verified_pre);
+          content_verified.appendChild(div_pre);
+          content_verified.appendChild(verified_bottom);
+        content.appendChild(content_heading);
+        content.appendChild(content_verified);
+      container.appendChild(icon);
+      container.appendChild(content);
+      displayNotification(container);
     }
 
-    function init() {
-        parseConfig();
-        build();
+    function displayNotification(container) {
+      var link = document.createElement("link");
+      link.href = "note.css";
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.id = "stylesheetID"
+      document.getElementsByTagName("head")[0].appendChild(link);
+      container.className = "show";
+      setTimeout(function() {
+        container.className = container.className.replace("show", "");
+        container.parentNode.removeChild(container)
+        var stylesheet = document.getElementById('stylesheetID');
+        stylesheet.parentNode.removeChild(stylesheet);
+      }, 3000);
+      document.body.appendChild(container);
     }
-
-    function parseConfig() {
-        self.config = {
-            duration: 4,
-            position: "bottomRight",
-            closeIcon: '<svg viewbox="0 0 40 40"><path d="M 10,10 L 30,30 M 30,10 L 10,30" /></svg>'
-        };
-
-        if (config) for (var opt in config) {
-            self.config[opt] = config[opt];
-        }
-    }
-
-    function build() {
-        self.container = createElement("div", "note--container " + self.config.position);
-        self.innerContainer = createElement("div", "note--inner");
-        self.container.appendChild(self.innerContainer);
-        document.body.appendChild(self.container);
-    }
-
-    function destroy() {
-        document.body.removeChild(self.container);
-    }
-
-    function showGeneric(type, title, content, noteConfig) {
-        // {
-        //     type: ["info", "success", "error", "warning"],
-        //     title: "",
-        //     content: ""
-        // }
-
-        noteConfig = noteConfig || {};
-
-        var note = createElement("div", "note shown note--" + type);
-        var noteFragment = document.createDocumentFragment(),
-            noteCloseButton = createElement("div", "note--close", self.config.closeIcon),
-            noteContent = createElement("div", "note--content");
-
-        if (title) {
-            note.classList.add("hasTitle");
-            noteContent.appendChild(createElement("h2", "note--title", title));
-        }
-
-        noteContent.appendChild(createElement("p", "note--body", content));
-
-        noteFragment.appendChild(noteContent);
-        noteFragment.appendChild(noteCloseButton);
-
-        note.appendChild(noteFragment);
-        self.innerContainer.appendChild(note);
-
-        var onAnimationEnd = function onAnimationEnd(e) {
-            return !note.classList.contains("shown") && self.innerContainer.removeChild(note);
-        };
-        var hide = function hide() {
-            note.classList.remove("shown");
-        };
-
-        note.addEventListener("click", hide);
-        note.addEventListener("animationend", onAnimationEnd);
-
-        if (!noteConfig.sticky && !self.config.sticky) setTimeout(hide, (noteConfig.duration || self.config.duration) * 1000);
-
-        return {
-            hide: hide,
-
-            show: function show() {
-                if (!note.parentNode) self.innerContainer.appendChild(note);
-                note.classList.add("shown");
-            }
-        };
-    }
-
-    init();
 
     return {
-        show: showGeneric,
-        success: function success(title, text, config) {
-            return showGeneric("success", title, text, config);
+        live: function live(text, config) {
+          liveNotification(text, config)
         },
-        info: function info(title, text, config) {
-            return showGeneric("info", title, text, config);
+        identification: function identification(text, config) {
+          signUpNotification(text, config)
         },
-        notify: function notify(title, text, config) {
-            return showGeneric("default", title, text, config);
-        },
-        error: function error(title, text, config) {
-            return showGeneric("error", title, text, config);
-        },
-        warn: function warn(title, text, config) {
-            return showGeneric("warning", title, text, config);
-        },
-        destroy: destroy
+        journey: function journey(text, config) {
+          recentNotification(text, config)
+        }
     };
 };
 

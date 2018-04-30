@@ -110,6 +110,8 @@
 }
 
 .verified-content {
+  margin: 0;
+  padding: 1px;
   color: lightgray;
 }
 
