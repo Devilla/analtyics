@@ -3838,6 +3838,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   console.log("This is notifications " + config);
+  liveCssFunction();
 
   //Retrieve Notifications
   var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type=live';
@@ -3852,11 +3853,60 @@ var Notifications = function(config) {
       console.log('Send data to us using websocket ')
     }
   });
-
-
-
-
 };
+
+function liveCssFunction() {
+        var container = document.createElement('div');
+        container.setAttribute("id","notification-container")
+        container.style = "visibility: visible;display: flex;min-width: 20%;margin-left: -25%;height: 72px;background-color: white;color: black;text-align: center;border-radius: 2px;padding: 0px 0px;position: fixed;z-index: 1;left: 100%;bottom: 30px;font-size: 17px;border: 1px solid lightgray;border-radius: 45px;box-shadow: 1px 1px lightgrey;font-family: sans-serif;font-weight: 100;"
+          var icon = document.createElement('div');
+            var icon_p = document.createElement('p');
+            icon_p.onmouseover = function() {
+              icon_p.style.boxShadow= '0px 0px 30px 0px rgba(232, 0, 0, 0.67)';
+              icon_p.style.borderRadius= '30px';
+            }
+            icon_p.onmouseout = function() {
+              icon_p.style.boxShadow= '0px 0px 0px 0px transparent';
+              icon_p.style.borderRadius= '50%';
+            }
+            icon_p.style = "height: 35px;width: 35px;margin-left: 15px;margin-right: 15px;background-color: #2f95f7;border-radius: 50%;display: inline-block;";
+            icon.appendChild(icon_p);
+          var content = document.createElement('div');
+            content.style = "width: 220px;height: 65px;font-size: smaller;padding: 6px 18px;";
+            var content_p = document.createElement('p');
+              content_p.style = "text-align: left;margin-bottom: 0;";
+                var p_span = document.createElement('span');
+                p_span.style = "color: #2f95f7;";
+                p_span.innerHTML = "235 people ";
+                var text_span = document.createTextNode("are viewing this site");
+              content_p.appendChild(p_span);
+              content_p.appendChild(text_span);
+            var content_div = document.createElement('div');
+              content_div.style = "margin: 0;font-size: small;text-align: left;display: flex;";
+              var verified_pre = document.createElement('pre');
+                verified_pre.style = "color: lightgray;margin: 0;font-family: sans-serif;";
+                verified_pre.innerHTML = "verified by ";
+              var div_pre = document.createElement('pre');
+                div_pre.style = "margin: 0;font-family: sans-serif;";
+                div_pre.innerHTML = "Influence";
+              content_div.appendChild(verified_pre);
+              content_div.appendChild(div_pre);
+            content.appendChild(content_p);
+            content.appendChild(content_div);
+          container.appendChild(icon);
+          container.appendChild(content);
+          container.animate([
+            { transform: 'translateX(500px)' },
+            { transform: 'translateX(0px)' }
+          ], {
+            duration: 1000,
+          });
+          setTimeout(function(){
+            container.style.visibility = "hidden";
+          }, 3000);
+        document.body.appendChild(container);
+      };
+
 
 function httpGetAsync(theUrl, callback)
 {
