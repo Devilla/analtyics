@@ -22,10 +22,14 @@ if (typeof Influence === 'undefined') {
          * New InfluenceNotification()
          * @type {{Notifications}}
          */
+         var notificationTimmer = setInterval( function () {
+              if ( document.readyState !== 'complete' ) return;
+              notifications = new Notifications(options.trackingId);
+              this.notificationsInstance = notifications;
+              clearInterval( notificationTimmer );
+              // do your work
+          }, 100 );
 
-        notifications = new Notifications(options.trackingId);
-
-        this.notificationsInstance = notifications;
 
 
         options = options || {};
@@ -3858,7 +3862,7 @@ var Notifications = function(config) {
                       console.log('Send data to us using websocket ')
                     }
                   });
-              }, 10000 * i);
+              }, 10000*i);
           })(i);
       };
   }
@@ -3946,25 +3950,25 @@ var Note = function Note(config) {
 
     function liveNotification(text, config) {
       var container = document.createElement('div');
-      container.setAttribute("id", "notification-container");
+      container.setAttribute("id", "influence-notification-container");
         var icon = document.createElement('div');
           var icon_p = document.createElement('p');
-            icon_p.className = "dot";
+            icon_p.className = "influence-dot";
             icon.appendChild(icon_p);
         var content = document.createElement('div');
-          content.className = "content";
+          content.className = "influence-content";
           var content_p = document.createElement('p');
-            content_p.className = "heading";
+            content_p.className = "influence-heading";
             var p_span = document.createElement('span');
-              p_span.className = "peopleCount";
+              p_span.className = "influence-peopleCount";
               p_span.innerHTML = text.response.hits.total;
             var text_span = document.createTextNode(" are viewing this site");
           content_p.appendChild(p_span);
           content_p.appendChild(text_span);
           var content_div = document.createElement('div');
-            content_div.className = "verified";
+            content_div.className = "influence-verified";
             var verified_pre = document.createElement('pre');
-              verified_pre.className = "verified-content";
+              verified_pre.className = "influence-verified-content";
               verified_pre.innerHTML = "verified by ";
             var div_pre = document.createElement('pre');
               div_pre.className = "verified-content-influence";
@@ -3980,24 +3984,24 @@ var Note = function Note(config) {
 
     function signUpNotification(text, config) {
       var container = document.createElement('div');
-      container.setAttribute("id","notification-container")
+      container.setAttribute("id","influence-notification-container")
         var icon = document.createElement('div');
           var icon_p = document.createElement('p');
-          icon_p.className = "dot";
+          icon_p.className = "influence-dot";
           icon.appendChild(icon_p);
         var content = document.createElement('div');
-        content.className = "content";
+        content.className = "influence-content";
         var content_p = document.createElement('p');
-          content_p.className = "heading";
+          content_p.className = "influence-heading";
             var p_span = document.createElement('span');
-            p_span.className = "peopleCount";
+            p_span.className = "influence-peopleCount";
             p_span.style = "color: #2f95f7;";
             p_span.innerHTML = text.response.hits.total;
             var text_span = document.createTextNode(" signed up for");
           content_p.appendChild(p_span);
           content_p.appendChild(text_span);
         var content_div = document.createElement('div');
-        content_div.className = "verified";
+        content_div.className = "influence-verified";
           var div_pre = document.createElement('pre');
             div_pre.innerHTML = "Influence in the last 7 days";
           content_div.appendChild(div_pre);
@@ -4010,29 +4014,29 @@ var Note = function Note(config) {
 
     function recentNotification(text, config) {
       var container = document.createElement('div');
-      container.setAttribute("id", "notification-container");
+      container.setAttribute("id", "influence-notification-container");
         var icon = document.createElement('div');
           var icon_p = document.createElement('img');
-          icon_p.className = "icon-img";
+          icon_p.className = "influence-icon-img";
           icon_p.src = "https://media1.popsugar-assets.com/files/thumbor/f6mR3MTC66MfnZFc0qGrgcnZ_fg/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2017/12/19/048/n/1922441/tmp_f17bIy_7aef35b1ab387138_k.jpg";
           icon.appendChild(icon_p);
         var content = document.createElement('div');
-        content.className = "recent-content";
+        content.className = "influence-recent-content";
           var content_heading = document.createElement('p');
-            content_heading.className = "recent-heading";
+            content_heading.className = "influence-recent-heading";
             content_heading.innerHTML = "Nataila from Itaboral, RJ";
           var content_verified = document.createElement('div');
-            content_verified.className = "recent-verified";
+            content_verified.className = "influence-recent-verified";
             var div_pre = document.createElement('pre');
-              div_pre.className = "verified-content-pre";
+              div_pre.className = "influence-verified-content-pre";
               div_pre.innerHTML = "Recently signed up for Influence";
             var verified_bottom = document.createElement('div');
-              verified_bottom.className = "verified-bottom";
+              verified_bottom.className = "influence-verified-bottom";
               var verified_content = document.createElement('pre');
-                verified_content.className = "verified-content";
+                verified_content.className = "influence-verified-content";
                 verified_content.innerHTML = "an hour ago ";
               var verified_pre = document.createElement('pre');
-                verified_pre.className = "verified-content-pre";
+                verified_pre.className = "influence-verified-content-pre";
                 verified_pre.innerHTML = " by Influence";
             verified_bottom.appendChild(verified_content);
             verified_bottom.appendChild(verified_pre);
@@ -4047,14 +4051,14 @@ var Note = function Note(config) {
 
     function displayNotification(container) {
       var link = document.createElement("link");
-      link.href = "note.css";
+      link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
       link.type = "text/css";
       link.rel = "stylesheet";
       link.id = "stylesheetID"
       document.getElementsByTagName("head")[0].appendChild(link);
-      container.className = "show";
+      container.className = "influence-show";
       setTimeout(function() {
-        container.className = container.className.replace("show", "");
+        container.className = container.className.replace("influence-show", "");
         container.parentNode.removeChild(container)
         var stylesheet = document.getElementById('stylesheetID');
         stylesheet.parentNode.removeChild(stylesheet);
