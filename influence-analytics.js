@@ -3846,25 +3846,26 @@ var Notifications = function(config) {
   var splittedUrls = ["live", "identification", "journey"];
 
   function loopThroughSplittedNotifications(splittedUrls) {
-      for (var i = 0; i < splittedUrls.length; i++) {
-          (function (i) {
-              setTimeout(function () {
-                var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
-                  console.log(url);
-                  httpGetAsync(url, function(res) {
-                    response = JSON.parse(res)
-                    if (!response.message.error) {
-                      console.log(response);
-                      var note = new Note({});
-                      // We will work on the notification later on.
-                      note[splittedUrls[i]](response.message , { duration: 5 });
-                    } else {
-                      console.log('Send data to us using websocket ')
-                    }
-                  });
-              }, 10000*i);
-          })(i);
-      };
+    for (var i = 0; i < splittedUrls.length; i++) {
+      (function (i) {
+        var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
+          httpGetAsync(url, function(res) {
+            response = JSON.parse(res);
+            if (!response.message.error) {
+              const info = response.message;
+              const rule = info.rule;
+              console.log(response);
+              // if(rule.displayNotifications)
+                setTimeout(function() {
+                  var note = new Note({});
+                  note[splittedUrls[i]](info);
+                }, rule.initialDelay+rule.delayBetween*i*100)
+            } else {
+              console.log('Send data to us using websocket ')
+            }
+          });
+      })(i);
+    };
   }
 
   loopThroughSplittedNotifications(splittedUrls);
@@ -4003,7 +4004,7 @@ function timeSince(time) {
 
 var Note = function Note(config) {
 
-    function liveNotification(text, config) {
+    function liveNotification(config) {
       var container = document.createElement('div');
       container.setAttribute("id", "influence-notification-container");
         var icon = document.createElement('div');
@@ -4016,7 +4017,7 @@ var Note = function Note(config) {
             content_p.className = "influence-heading";
             var p_span = document.createElement('span');
               p_span.className = "influence-peopleCount";
-              p_span.innerHTML = text.response.hits.total;
+              p_span.innerHTML = config.response.hits.total;
             var text_span = document.createTextNode(" are viewing this site");
           content_p.appendChild(p_span);
           content_p.appendChild(text_span);
@@ -4034,10 +4035,10 @@ var Note = function Note(config) {
         content.appendChild(content_div);
       container.appendChild(icon);
       container.appendChild(content);
-      displayNotification(container);
+      displayNotification(container, config);
     };
 
-    function signUpNotification(text, config) {
+    function signUpNotification(config) {
       var container = document.createElement('div');
       container.setAttribute("id","influence-notification-container")
         var icon = document.createElement('div');
@@ -4051,7 +4052,7 @@ var Note = function Note(config) {
             var p_span = document.createElement('span');
             p_span.className = "influence-peopleCount";
             p_span.style = "color: #2f95f7;";
-            p_span.innerHTML = text.response.hits.total;
+            p_span.innerHTML = config.response.hits.total;
             var text_span = document.createTextNode(" signed up for");
           content_p.appendChild(p_span);
           content_p.appendChild(text_span);
@@ -4064,23 +4065,23 @@ var Note = function Note(config) {
         content.appendChild(content_div);
       container.appendChild(icon);
       container.appendChild(content);
-      displayNotification(container);
+      displayNotification(container, config);
     };
 
-    function recentNotification(text, config) {
+    function recentNotification(config) {
       var container = document.createElement('div');
       container.setAttribute("id", "influence-notification-container");
         var icon = document.createElement('div');
           var icon_p = document.createElement('img');
           icon_p.className = "influence-icon-img";
-          var res_img = text.userDetails.profile_pic;
+          var res_img = config.userDetails.profile_pic;
           icon_p.src = res_img?res_img:"https://media1.popsugar-assets.com/files/thumbor/f6mR3MTC66MfnZFc0qGrgcnZ_fg/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2017/12/19/048/n/1922441/tmp_f17bIy_7aef35b1ab387138_k.jpg";
           icon.appendChild(icon_p);
         var content = document.createElement('div');
         content.className = "influence-recent-content";
           var content_heading = document.createElement('p');
             content_heading.className = "influence-recent-heading";
-            var res_name = text.userDetails.username;
+            var res_name = config.userDetails.username;
             content_heading.innerHTML = res_name?res_name:"Nataila from Itaboral, RJ";
           var content_verified = document.createElement('div');
             content_verified.className = "influence-recent-verified";
@@ -4091,7 +4092,7 @@ var Note = function Note(config) {
               verified_bottom.className = "influence-verified-bottom";
               var verified_content = document.createElement('pre');
                 verified_content.className = "influence-verified-content";
-                var timeStamp = text.userDetails.timestamp;
+                var timeStamp = config.userDetails.timestamp;
                 verified_content.innerHTML = timeStamp?timeSince(new Date(new Date()-new Date(timeStamp))):"Not available ";
               var verified_pre = document.createElement('pre');
                 verified_pre.className = "influence-verified-content-pre";
@@ -4104,10 +4105,10 @@ var Note = function Note(config) {
         content.appendChild(content_verified);
       container.appendChild(icon);
       container.appendChild(content);
-      displayNotification(container);
+      displayNotification(container, config);
     }
 
-    function displayNotification(container) {
+    function displayNotification(container, config) {
       var link = document.createElement("link");
       link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
       link.type = "text/css";
@@ -4120,19 +4121,19 @@ var Note = function Note(config) {
         container.parentNode.removeChild(container)
         var stylesheet = document.getElementById('stylesheetID');
         stylesheet.parentNode.removeChild(stylesheet);
-      }, 3000);
+      }, 5000);
       document.body.appendChild(container);
     }
 
     return {
-        live: function live(text, config) {
-          liveNotification(text, config)
+        live: function live(config) {
+          liveNotification(config)
         },
-        identification: function identification(text, config) {
-          signUpNotification(text, config)
+        identification: function identification(config) {
+          signUpNotification(config)
         },
-        journey: function journey(text, config) {
-          recentNotification(text, config)
+        journey: function journey(config) {
+          recentNotification(config)
         }
     };
 };

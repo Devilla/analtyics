@@ -9,7 +9,7 @@
   text-align: center;
   border-radius: 2px;
   padding: 0px 0px;
-  position: fixed;
+  position: absolute;
   z-index: 1;
   left: 100%;
   bottom: 30px;
