@@ -4057,7 +4057,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
             content_div.className = "influence-verified";
             var verified_pre = document.createElement('pre');
               verified_pre.className = "influence-verified-content";
-              verified_pre.innerHTML = "verified by ";
+              verified_pre.innerHTML = "Verified by ";
             var div_pre = document.createElement('pre');
               div_pre.className = "verified-content-influence";
               div_pre.innerHTML = "Influence";
@@ -4076,7 +4076,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
       container.style = containerStyle;
         var icon = document.createElement('div');
           var icon_p = document.createElement('p');
-          icon_p.className = "influence-dot";
+          icon_p.className = "influence-dot-s";
           icon_p.style = iconStyle;
           icon.appendChild(icon_p);
         var content = document.createElement('div');
@@ -4092,7 +4092,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
           content_p.appendChild(text_span);
         var content_div = document.createElement('div');
         content_div.className = "influence-verified";
-          var div_pre = document.createElement('pre');
+          var div_pre = document.createElement('pres');
             div_pre.innerHTML = "Influence in the last 7 days";
           content_div.appendChild(div_pre);
         content.appendChild(content_p);
@@ -4131,7 +4131,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                 var timeStamp = config.userDetails.timestamp;
                 verified_content.innerHTML = timeStamp?timeSince(new Date(new Date()-new Date(timeStamp))):"Not available ";
               var verified_pre = document.createElement('pre');
-                verified_pre.className = "influence-verified-content-pre";
+                verified_pre.className = "influence-verified-content-pre2";
                 verified_pre.innerHTML = " by Influence";
             verified_bottom.appendChild(verified_content);
             verified_bottom.appendChild(verified_pre);
