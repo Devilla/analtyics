@@ -4024,7 +4024,7 @@ var Note = function Note(config) {
             content_div.className = "influence-verified";
             var verified_pre = document.createElement('pre');
               verified_pre.className = "influence-verified-content";
-              verified_pre.innerHTML = "verified by ";
+              verified_pre.innerHTML = "Verified by ";
             var div_pre = document.createElement('pre');
               div_pre.className = "verified-content-influence";
               div_pre.innerHTML = "Influence";
@@ -4042,7 +4042,7 @@ var Note = function Note(config) {
       container.setAttribute("id","influence-notification-container")
         var icon = document.createElement('div');
           var icon_p = document.createElement('p');
-          icon_p.className = "influence-dot";
+          icon_p.className = "influence-dot-s";
           icon.appendChild(icon_p);
         var content = document.createElement('div');
         content.className = "influence-content";
@@ -4057,7 +4057,7 @@ var Note = function Note(config) {
           content_p.appendChild(text_span);
         var content_div = document.createElement('div');
         content_div.className = "influence-verified";
-          var div_pre = document.createElement('pre');
+          var div_pre = document.createElement('pres');
             div_pre.innerHTML = "Influence in the last 7 days";
           content_div.appendChild(div_pre);
         content.appendChild(content_p);
@@ -4081,7 +4081,7 @@ var Note = function Note(config) {
           var content_heading = document.createElement('p');
             content_heading.className = "influence-recent-heading";
             var res_name = text.userDetails.username;
-            content_heading.innerHTML = res_name?res_name:"Nataila from Itaboral, RJ";
+            content_heading.innerHTML = res_name?res_name:"Natalia from Itaboral, RJ";
           var content_verified = document.createElement('div');
             content_verified.className = "influence-recent-verified";
             var div_pre = document.createElement('pre');
@@ -4094,7 +4094,7 @@ var Note = function Note(config) {
                 var timeStamp = text.userDetails.timestamp;
                 verified_content.innerHTML = timeStamp?timeSince(new Date(new Date()-new Date(timeStamp))):"Not available ";
               var verified_pre = document.createElement('pre');
-                verified_pre.className = "influence-verified-content-pre";
+                verified_pre.className = "influence-verified-content-pre2";
                 verified_pre.innerHTML = " by Influence";
             verified_bottom.appendChild(verified_content);
             verified_bottom.appendChild(verified_pre);

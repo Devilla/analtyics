@@ -2,90 +2,150 @@
   visibility: hidden;
   display: flex;
   min-width: 20%;
+  width: 320px;
   margin-left: -25%;
   height: 72px;
   background-color: white;
   color: black;
-  text-align: center;
-  border-radius: 2px;
-  padding: 0px 0px;
   position: fixed;
   z-index: 1;
   left: 100%;
-  bottom: 30px;
+  bottom: 25px;
   font-size: 17px;
-  border: 1px solid lightgray;
+  border: 0.4px solid lightgrey;
   border-radius: 45px;
-  box-shadow: 1px 2px lightgrey;
+  box-shadow: 0.15px 0.15px 0.25px 0.25px lightgrey;
   font-family: sans-serif;
-  font-weight: 100;
+  
 }
 
+
 .influence-dot {
-  height: 35px;
-  width: 35px;
-  margin-left: 15px;
-  margin-right: 15px;
-  margin-top: 18px;
+  height: 32px;
+  width: 32px;
+  margin-left: 22px;
+  margin-right: 28px;
+  margin-top: 20px;
   background-color: #2f95f7;
   border-radius: 50%;
-  display: inline-block;
+ 
 }
 
 .influence-dot:hover {
   -webkit-border-radius: 30px;
   -moz-border-radius: 30px;
   border-radius: 30px;
-  -webkit-box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.67);
-  -moz-box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.67);
-  box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.67);
+  -webkit-box-shadow: 0px 0px 40px 5px rgba(15, 137, 255, 1.0);
+  -moz-box-shadow: 0px 0px 40px 5px rgba(15, 137, 255, 1.0);
+  box-shadow: 0px 0px 40px 5px rgba(15, 137, 255, 1.0);
+}
+
+.influence-dot:last-of-type {
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  -webkit-box-shadow: 0px 0px 15px 5px rgba(15, 137, 255, 0.41);
+  -moz-box-shadow: 0px 0px 15px 5px rgba(15, 137, 255, 0.41);
+  box-shadow: 0px 0px 15px 5px rgba(15, 137, 255, 0.41);
 }
 
 .influence-dot:last-of-type:hover {
   -webkit-border-radius: 30px;
   -moz-border-radius: 30px;
   border-radius: 30px;
-  -webkit-box-shadow: 0px 0px 30px 0px rgba(232, 0, 0, 0.67);
-  -moz-box-shadow: 0px 0px 30px 0px rgba(232, 0, 0, 0.67);
-  box-shadow: 0px 0px 30px 0px rgba(232, 0, 0, 0.67);
+  -webkit-box-shadow: 0px 0px 25px 6.3px rgba(0, 129, 255, 0.65);
+  -moz-box-shadow: 0px 0px 25px 6.3px rgba(0, 129, 255, 0.65);
+  box-shadow: 0px 0px 25px 6.3px rgba(0, 129, 255, 0.65);
+}
+
+.influence-dot-s {
+  height: 32px;
+  width: 32px;
+  margin-left: 24px;
+  margin-right: 28px;
+  margin-top: 20px;
+  background-color: #f70000;
+  border-radius: 50%;
+ 
+}
+
+.influence-dot-s:hover {
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  -webkit-box-shadow: 0px 0px 40px 5px rgba(255, 109, 109, 1.0);
+  -moz-box-shadow: 0px 0px 40px 5px rgba(255, 109, 109, 1.0);
+  box-shadow: 0px 0px 40px 5px rgba(255, 109, 109, 1.0);
+}
+
+.influence-dot-s:last-of-type {
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  -webkit-box-shadow: 0px 0px 15px 5px rgba(255, 109, 109, 0.41);
+  -moz-box-shadow: 0px 0px 15px 5px rgba(255, 109, 109, 0.41);
+  box-shadow: 0px 0px 15px 5px rgba(255, 109, 109, 0.41);
+}
+
+.influence-dot-s:last-of-type:hover {
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  -webkit-box-shadow: 0px 0px 25px 6.3px rgba(255, 109, 109, 0.65);
+  -moz-box-shadow: 0px 0px 25px 6.3px rgba(255, 109, 109, 0.65);
+  box-shadow: 0px 0px 25px 6.3px rgba(255, 109, 109, 0.65);
 }
 
 .influence-icon-img {
-  height: 70px;
+  height: 65px;
   width: 65px;
-  padding: 4px 0px;
-  margin-left: 5px;
+  padding: 0px;
+  margin: 3.5px;
   border-radius: 50%;
   display: inline-block;
 }
 
 .influence-content {
   width: 220px;
-  height: 65px;
+  height: 67px;
   font-size: smaller;
-  padding: 15px 18px;
 }
 
 .influence-recent-content {
   width: 220px;
-  height: 65px;
+  height: 68px;
   font-size: smaller;
-  padding: 8px 18px;
+  text-align: left;
 }
 
 .influence-heading {
   text-align: left;
-  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 14.5px;
+  margin: 0px !important;
+  padding: 16px 0px 1.8px 14px;
+  color: #333435;
+  letter-spacing: -0.25px;
+  text-shadow: 0.01px 0.01px 0.02px;
 }
 
 .influence-recent-heading {
   text-align: left;
-  font-weight: 600;
-  margin-bottom: 0;
+  font-weight: bold;
+  font-size: 14.5px;
+  margin: 0px !important;
+  padding: 10px 0px 0px 14px !important;
+  color: #333435;
+  letter-spacing: -0.25px;
+  text-shadow: 0.01px 0.01px 0.02px;
 }
 
 .influence-peopleCount {
   color: #2f95f7;
+  font-weight: 700;
+  font-size: 14px;
+  padding-right: 10px;
+  text-align: left;
 }
 
 .influence-verified {
@@ -96,20 +156,34 @@
 }
 
 .influence-recent-verified {
-  margin: 0;
-  font-size: small;
   text-align: left;
+  font-weight: 500;
+  color: #969ea5;
+  padding-bottom: 4px;
 }
 
 .influence-verified-bottom {
   display: flex;
+  line-height: 13px;
 }
 
 .influence-verified pre {
   margin: 0 !important;
   font-family: sans-serif !important;
-  padding: 0.5px !important;
   font-size: 12px;
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+  border-left: 0;
+}
+
+.influence-verified pres {
+  margin: 0 !important;
+  font-family: sans-serif !important;
+  padding: 0px 2px 3px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #007fff;
   background-color: transparent;
   border: 0;
   border-radius: 0;
@@ -118,20 +192,28 @@
 
 .influence-verified-content {
   margin: 0 !important;
-  padding: 0.5px !important;
-  color: lightgray;
-  font-size: 12px;
+  padding-right: 2px !important;
+  padding-left: 14px !important;
+  padding-top: 2px;
+  font-family: sans-serif !important;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: #969ea5;
+  letter-spacing: -0.35px;
+  word-spacing: -1px;
   background-color: transparent;
   border: 0;
   border-radius: 0;
   border-left: 0;
+  text-shadow: 0.01px 0.01px 0.01px;
 }
 
 .verified-content-influence {
   margin: 0 !important;
   font-family: sans-serif;
-  padding: 0.5px !important;
+  padding: 2px 2px 4px 3px !important;
   font-size: 12px;
+  color: #007fff;
   background-color: transparent;
   border: 0;
   border-radius: 0;
@@ -139,14 +221,33 @@
 }
 
 .influence-verified-content-pre {
-  margin: 0 !important;
   font-family: sans-serif !important;
-  padding: 0px !important;
-  font-size: 12px;
+  padding-top: 0px !important;
+  padding-left: 14px; 
+  padding-bottom: 4px;
+  padding-right: 2px;
+  margin: 0px !important;;
+  font-size: 11.7px;
   background-color: transparent;
   border: 0;
   border-radius: 0;
   border-left: 0;
+  text-shadow: 0.01px 0.01px 0.01px;
+}
+
+.influence-verified-content-pre2 {
+  font-family: sans-serif !important;
+  padding-top: 4px !important;
+  padding-left: 38px; 
+  padding-bottom: 4px;
+  padding-right: 1px;
+  margin: 0px !important;;
+  font-size: 10.7px;
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+  border-left: 0;
+  color: #007fff !important;
 }
 
 #influence-notification-container.influence-show {
