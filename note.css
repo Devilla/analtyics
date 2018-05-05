@@ -7,16 +7,24 @@
   height: 72px;
   background-color: rgba(255, 255, 255, 1.0);
   color: black;
-  position: fixed;
+  text-align: center;
+  padding: 0px 0px;
+  position: absolute;
   z-index: 1;
   left: 100%;
   bottom: 25px;
   font-size: 17px;
   border: 0.4px solid rgba(190, 150, 150, 0.3);
   border-radius: 45px;
+<<<<<<< HEAD
   box-shadow: 0.4px 0.37px 0.5px 1.5px rgba(243, 243, 243);
   font-family: sans-serif !important;
   
+=======
+  box-shadow: 0.15px 0.15px 0.25px 0.25px lightgrey;
+  font-family: sans-serif;
+
+>>>>>>> 4470567dcb369e0324ba1b100af24ec4173b7341
 }
 
 
@@ -28,7 +36,7 @@
   margin-top: 20px;
   background-color: #2f95f7;
   border-radius: 50%;
- 
+
 }
 
 .influence-dot:hover {
@@ -66,7 +74,7 @@
   margin-top: 20px;
   background-color: #ff3838;
   border-radius: 50%;
- 
+
 }
 
 .influence-dot-s:hover {
@@ -244,7 +252,14 @@
 
 .influence-verified-content-pre {
   font-family: sans-serif !important;
+<<<<<<< HEAD
   padding: 0px 2px 4px 12px !important;
+=======
+  padding-top: 0px !important;
+  padding-left: 14px;
+  padding-bottom: 4px;
+  padding-right: 2px;
+>>>>>>> 4470567dcb369e0324ba1b100af24ec4173b7341
   margin: 0px !important;;
   font-size: 11.9px;
   font-weight: 400;
@@ -259,7 +274,14 @@
 
 .influence-verified-content-pre2 {
   font-family: sans-serif !important;
+<<<<<<< HEAD
   padding: 3px 3px 2px 15px !important;
+=======
+  padding-top: 4px !important;
+  padding-left: 38px;
+  padding-bottom: 4px;
+  padding-right: 1px;
+>>>>>>> 4470567dcb369e0324ba1b100af24ec4173b7341
   margin: 0px !important;;
   font-size: 11px;
   background-color: transparent;
@@ -269,11 +291,11 @@
   color: #007fff !important;
 }
 
-#influence-notification-container.influence-show {
+/* #influence-notification-container.influence-show {
   visibility: visible;
   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
+} */
 
 @-webkit-keyframes fadein {
   from {

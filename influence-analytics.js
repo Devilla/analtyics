@@ -3846,25 +3846,56 @@ var Notifications = function(config) {
   var splittedUrls = ["live", "identification", "journey"];
 
   function loopThroughSplittedNotifications(splittedUrls) {
-      for (var i = 0; i < splittedUrls.length; i++) {
-          (function (i) {
-              setTimeout(function () {
-                var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
-                  console.log(url);
-                  httpGetAsync(url, function(res) {
-                    response = JSON.parse(res)
-                    if (!response.message.error) {
-                      console.log(response);
-                      var note = new Note({});
-                      // We will work on the notification later on.
-                      note[splittedUrls[i]](response.message , { duration: 5 });
-                    } else {
-                      console.log('Send data to us using websocket ')
-                    }
-                  });
-              }, 10000*i);
-          })(i);
-      };
+    for (var i = 0; i < splittedUrls.length; i++) {
+      (function (i) {
+        var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
+          console.log(url);
+          httpGetAsync(url, function(res) {
+            response = JSON.parse(res);
+            if (!response.message.error) {
+              const info = response.message;
+              const rule = info.rule;
+              console.log(response);
+              // if(rule.displayNotifications)
+                setTimeout(function() {
+                  var note = new Note({});
+                  const configuration = info.configuration;
+                  let containerStyle;
+                  let iconStyle;
+                  if(configuration) {
+                    const panelStyle = configuration.panelStyle;
+                    const backgroundColor = panelStyle.backgroundColor;
+                    const borderColor = panelStyle.borderColor;
+                    const color = panelStyle.color;
+                    containerStyle = `
+                      border-radius: ${panelStyle.radius}px;
+                      background-color: rgb(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${backgroundColor.a});
+                      border-color: rgb(${borderColor.r}, ${borderColor.g}, ${borderColor.b}, ${borderColor.a});
+                      box-shadow: rgb(0, 0, 0) ${panelStyle.shadow}px ${panelStyle.shadow}px ${panelStyle.blur}px;
+                      color: rgb(${color.r}, ${color.g}, ${color.b});
+                      border-width: ${panelStyle.borderWidth}px;
+                      height: ${72+panelStyle.borderWidth*2}px;
+                      font-family: ${panelStyle.fontFamily};
+                      font-Weight: ${panelStyle.fontWeight};
+                      -webkit-animation: fadein 0.5s, fadeout ${info.rule.displayTime*100}s;
+                      animation: fadein 0.5s, fadeout 0.5s ${info.rule.displayTime*100}s;
+                      visibility: visible;
+                    `;
+                    iconStyle = `border-radius: ${panelStyle.radius}px;`;
+                  } else {
+                    containerStyle = `
+                      animation: fadein 0.5s, fadeout 0.5s ${info.rule.displayTime*100}s;
+                      visibility: visible;
+                    `;
+                  }
+                  note[splittedUrls[i]](info, containerStyle, iconStyle);
+                }, rule.initialDelay+rule.delayBetween*(i+1)*100);
+            } else {
+              console.log('Send data to us using websocket ')
+            }
+          });
+      })(i);
+    }
   }
 
   loopThroughSplittedNotifications(splittedUrls);
@@ -4001,14 +4032,16 @@ function timeSince(time) {
   }
 
 
-var Note = function Note(config) {
+var Note = function Note(config, containerStyle, iconStyle) {
 
-    function liveNotification(text, config) {
+    function liveNotification(config, containerStyle, iconStyle) {
       var container = document.createElement('div');
       container.setAttribute("id", "influence-notification-container");
+      container.style = containerStyle;
         var icon = document.createElement('div');
           var icon_p = document.createElement('p');
             icon_p.className = "influence-dot";
+            icon_p.style = iconStyle;
             icon.appendChild(icon_p);
         var content = document.createElement('div');
           content.className = "influence-content";
@@ -4016,7 +4049,7 @@ var Note = function Note(config) {
             content_p.className = "influence-heading";
             var p_span = document.createElement('span');
               p_span.className = "influence-peopleCount";
-              p_span.innerHTML = text.response.hits.total;
+              p_span.innerHTML = config.response.hits.total;
             var text_span = document.createTextNode(" are viewing this site");
           content_p.appendChild(p_span);
           content_p.appendChild(text_span);
@@ -4034,15 +4067,17 @@ var Note = function Note(config) {
         content.appendChild(content_div);
       container.appendChild(icon);
       container.appendChild(content);
-      displayNotification(container);
+      displayNotification(container, config);
     };
 
-    function signUpNotification(text, config) {
+    function signUpNotification(config, containerStyle, iconStyle) {
       var container = document.createElement('div');
       container.setAttribute("id","influence-notification-container")
+      container.style = containerStyle;
         var icon = document.createElement('div');
           var icon_p = document.createElement('p');
           icon_p.className = "influence-dot-s";
+          icon_p.style = iconStyle;
           icon.appendChild(icon_p);
         var content = document.createElement('div');
         content.className = "influence-content";
@@ -4051,7 +4086,7 @@ var Note = function Note(config) {
             var p_span = document.createElement('span');
             p_span.className = "influence-peopleCount";
             p_span.style = "color: #2f95f7;";
-            p_span.innerHTML = text.response.hits.total;
+            p_span.innerHTML = config.response.hits.total;
             var text_span = document.createTextNode(" signed up for");
           content_p.appendChild(p_span);
           content_p.appendChild(text_span);
@@ -4064,24 +4099,26 @@ var Note = function Note(config) {
         content.appendChild(content_div);
       container.appendChild(icon);
       container.appendChild(content);
-      displayNotification(container);
+      displayNotification(container, config);
     };
 
-    function recentNotification(text, config) {
+    function recentNotification(config, containerStyle, iconStyle) {
       var container = document.createElement('div');
       container.setAttribute("id", "influence-notification-container");
+      container.style = containerStyle;
         var icon = document.createElement('div');
           var icon_p = document.createElement('img');
           icon_p.className = "influence-icon-img";
-          var res_img = text.userDetails.profile_pic;
+          icon_p.style = iconStyle;
+          var res_img = config.userDetails.profile_pic;
           icon_p.src = res_img?res_img:"https://media1.popsugar-assets.com/files/thumbor/f6mR3MTC66MfnZFc0qGrgcnZ_fg/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2017/12/19/048/n/1922441/tmp_f17bIy_7aef35b1ab387138_k.jpg";
           icon.appendChild(icon_p);
         var content = document.createElement('div');
         content.className = "influence-recent-content";
           var content_heading = document.createElement('p');
             content_heading.className = "influence-recent-heading";
-            var res_name = text.userDetails.username;
-            content_heading.innerHTML = res_name?res_name:"Natalia from Itaboral, RJ";
+            var res_name = config.userDetails.username;
+            content_heading.innerHTML = res_name?res_name:"Nataila from Itaboral, RJ";
           var content_verified = document.createElement('div');
             content_verified.className = "influence-recent-verified";
             var div_pre = document.createElement('pre');
@@ -4091,7 +4128,7 @@ var Note = function Note(config) {
               verified_bottom.className = "influence-verified-bottom";
               var verified_content = document.createElement('pre');
                 verified_content.className = "influence-verified-content";
-                var timeStamp = text.userDetails.timestamp;
+                var timeStamp = config.userDetails.timestamp;
                 verified_content.innerHTML = timeStamp?timeSince(new Date(new Date()-new Date(timeStamp))):"Not available ";
               var verified_pre = document.createElement('pre');
                 verified_pre.className = "influence-verified-content-pre2";
@@ -4104,10 +4141,10 @@ var Note = function Note(config) {
         content.appendChild(content_verified);
       container.appendChild(icon);
       container.appendChild(content);
-      displayNotification(container);
-    }
+      displayNotification(container, config);
+    };
 
-    function displayNotification(container) {
+    function displayNotification(container, config) {
       var link = document.createElement("link");
       link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
       link.type = "text/css";
@@ -4115,24 +4152,25 @@ var Note = function Note(config) {
       link.id = "stylesheetID"
       document.getElementsByTagName("head")[0].appendChild(link);
       container.className = "influence-show";
+      // container.style = `animation:fadein 0.5s, fadeout 0.5s ${config.rule.displayTime*100}s; visibility: visible;`;
       setTimeout(function() {
         container.className = container.className.replace("influence-show", "");
         container.parentNode.removeChild(container)
         var stylesheet = document.getElementById('stylesheetID');
         stylesheet.parentNode.removeChild(stylesheet);
-      }, 3000);
+      }, config.rule.displayTime*100);
       document.body.appendChild(container);
-    }
+    };
 
     return {
-        live: function live(text, config) {
-          liveNotification(text, config)
+        live: function live(config, containerStyle, iconStyle) {
+          liveNotification(config, containerStyle, iconStyle)
         },
-        identification: function identification(text, config) {
-          signUpNotification(text, config)
+        identification: function identification(config, containerStyle, iconStyle) {
+          signUpNotification(config, containerStyle, iconStyle)
         },
-        journey: function journey(text, config) {
-          recentNotification(text, config)
+        journey: function journey(config, containerStyle, iconStyle) {
+          recentNotification(config, containerStyle, iconStyle)
         }
     };
 };
