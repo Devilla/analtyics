@@ -16,15 +16,8 @@
   font-size: 17px;
   border: 0.4px solid rgba(190, 150, 150, 0.3);
   border-radius: 45px;
-<<<<<<< HEAD
-  box-shadow: 0.4px 0.37px 0.5px 1.5px rgba(243, 243, 243);
-  font-family: sans-serif !important;
-  
-=======
   box-shadow: 0.15px 0.15px 0.25px 0.25px lightgrey;
   font-family: sans-serif;
-
->>>>>>> 4470567dcb369e0324ba1b100af24ec4173b7341
 }
 
 
@@ -252,14 +245,10 @@
 
 .influence-verified-content-pre {
   font-family: sans-serif !important;
-<<<<<<< HEAD
-  padding: 0px 2px 4px 12px !important;
-=======
   padding-top: 0px !important;
-  padding-left: 14px;
-  padding-bottom: 4px;
-  padding-right: 2px;
->>>>>>> 4470567dcb369e0324ba1b100af24ec4173b7341
+  padding-left: 14px !important;
+  padding-bottom: 4px !important;
+  padding-right: 2px !important;
   margin: 0px !important;;
   font-size: 11.9px;
   font-weight: 400;
@@ -274,14 +263,10 @@
 
 .influence-verified-content-pre2 {
   font-family: sans-serif !important;
-<<<<<<< HEAD
-  padding: 3px 3px 2px 15px !important;
-=======
   padding-top: 4px !important;
-  padding-left: 38px;
-  padding-bottom: 4px;
-  padding-right: 1px;
->>>>>>> 4470567dcb369e0324ba1b100af24ec4173b7341
+  padding-left: 38px !important;
+  padding-bottom: 4px !important;
+  padding-right: 1px !important;
   margin: 0px !important;;
   font-size: 11px;
   background-color: transparent;
