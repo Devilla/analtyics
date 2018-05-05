@@ -4024,7 +4024,7 @@ var Note = function Note(config) {
             content_div.className = "influence-verified";
             var verified_pre = document.createElement('pre');
               verified_pre.className = "influence-verified-content";
-              verified_pre.innerHTML = "Verified by ";
+              verified_pre.innerHTML = "verified by ";
             var div_pre = document.createElement('pre');
               div_pre.className = "verified-content-influence";
               div_pre.innerHTML = "Influence";
@@ -4047,7 +4047,7 @@ var Note = function Note(config) {
         var content = document.createElement('div');
         content.className = "influence-content";
         var content_p = document.createElement('p');
-          content_p.className = "influence-heading";
+          content_p.className = "influence-heading-bulksignup";
             var p_span = document.createElement('span');
             p_span.className = "influence-peopleCount";
             p_span.style = "color: #2f95f7;";
@@ -4057,7 +4057,7 @@ var Note = function Note(config) {
           content_p.appendChild(text_span);
         var content_div = document.createElement('div');
         content_div.className = "influence-verified";
-          var div_pre = document.createElement('pres');
+          var div_pre = document.createElement('pres2');
             div_pre.innerHTML = "Influence in the last 7 days";
           content_div.appendChild(div_pre);
         content.appendChild(content_p);
