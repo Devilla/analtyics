@@ -3848,7 +3848,7 @@ var Notifications = function(config) {
   function loopThroughSplittedNotifications(splittedUrls) {
     for (var i = 0; i < splittedUrls.length; i++) {
       (function (i) {
-        var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
+        var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-azg2fhk0sjgarco71' + '?type='+splittedUrls[i];
           console.log(url);
           httpGetAsync(url, function(res) {
             response = JSON.parse(res);
@@ -4107,6 +4107,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
       container.setAttribute("id", "influence-notification-container");
       container.style = containerStyle;
         var icon = document.createElement('div');
+        icon.className = "influence-icon-container";
           var icon_p = document.createElement('img');
           icon_p.className = "influence-icon-img";
           icon_p.style = iconStyle;
@@ -4146,7 +4147,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
 
     function displayNotification(container, config) {
       var link = document.createElement("link");
-      link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
+      link.href = "note.css";
       link.type = "text/css";
       link.rel = "stylesheet";
       link.id = "stylesheetID"
