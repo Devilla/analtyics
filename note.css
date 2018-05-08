@@ -333,27 +333,107 @@
 }
 
 
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
 
-}
-
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-
-}
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
 
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
+  #influence-notification-container{
+    width: 25%;
+    margin-left: -30%;
+    height: 65px;
+  }
+
+  .influence-dot {
+    height: 32%;
+    width: 35%;
+    margin-left: 42%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  #influence-notification-container{
+    width: 30%;
+    margin-left: -35%;
+    height: 65px;
+  }
+  .influence-dot-container {
+    width: 35%;
+  }
+  .influence-dot {
+    height: 35%;
+    width: 35%;
+    margin-left: 42%;
+  }
+  .influence-dot-s {
+    height: 35%;
+    width: 35%;
+    margin-left: 42%;
+  }
+  .influence-icon-container {
+    width: 35%;
+  }
+  .influence-icon-img {
+    height: 85%;
+    width: 95%;
+    margin: 9% !important;
+  }
+  .influence-verified-content-pre {
+    font-size: 80%;
+  }
+  .influence-verified-content {
+    font-size: 80%;
+  }
+  .influence-verified-content-pre2 {
+    padding: 3px 0px 0px 2px !important;
+    font-size: 80%;
+  }
+}
+
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 601px) {
 
 }
 
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (min-width: 600px) {
+  #influence-notification-container{
+    width: 30%;
+    margin-left: -30%;
+    height: 65px;
+  }
 
+  .influence-dot {
+    height: 32%;
+    width: 35%;
+    margin-left: 42%;
+  }
+  .influence-dot-s {
+    height: 32%;
+    width: 35%;
+    margin-left: 42%;
+  }
+  .influence-icon-container {
+    width: 35%;
+  }
+  .influence-icon-img {
+    height: 85%;
+    width: 95%;
+    margin: 9% !important;
+  }
+  .influence-verified-content-pre {
+    font-size: 80%;
+  }
+  .influence-verified-content {
+    font-size: 80%;
+  }
+  .influence-verified-content-pre2 {
+    padding: 3px 0px 0px 2px !important;
+    font-size: 80%;
+  }
 }
