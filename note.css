@@ -20,10 +20,13 @@
   font-family: sans-serif;
 }
 
+.influence-dot-container {
+  width: 30%;
+}
 
 .influence-dot {
-  height: 32px;
-  width: 32px;
+  height: 45%;
+  width: 40%;
   margin-left: 22px;
   margin-right: 28px;
   margin-top: 20px;
@@ -61,14 +64,13 @@
 }
 
 .influence-dot-s {
-  height: 32px;
-  width: 32px;
+  height: 45%;
+  width: 40%;
   margin-left: 24px;
   margin-right: 28px;
   margin-top: 20px;
   background-color: #ff3838;
   border-radius: 50%;
-
 }
 
 .influence-dot-s:hover {
@@ -328,4 +330,30 @@
     bottom: 0;
     opacity: 0;
   }
+}
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
 }

@@ -4039,6 +4039,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
       container.setAttribute("id", "influence-notification-container");
       container.style = containerStyle;
         var icon = document.createElement('div');
+        icon.className = "influence-dot-container";
           var icon_p = document.createElement('p');
             icon_p.className = "influence-dot";
             icon_p.style = iconStyle;
@@ -4075,6 +4076,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
       container.setAttribute("id","influence-notification-container")
       container.style = containerStyle;
         var icon = document.createElement('div');
+        icon.className = "influence-dot-container";
           var icon_p = document.createElement('p');
           icon_p.className = "influence-dot-s";
           icon_p.style = iconStyle;
