@@ -3848,7 +3848,7 @@ var Notifications = function(config) {
   function loopThroughSplittedNotifications(splittedUrls) {
     for (var i = 0; i < splittedUrls.length; i++) {
       (function (i) {
-        var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-azg2fhk0sjgarco71' + '?type='+splittedUrls[i];
+        var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
           console.log(url);
           httpGetAsync(url, function(res) {
             response = JSON.parse(res);
@@ -3860,13 +3860,52 @@ var Notifications = function(config) {
                 setTimeout(function() {
                   var note = new Note({});
                   const configuration = info.configuration;
-                  let containerStyle;
-                  let iconStyle;
+                  const displayPosition = info.rule.displayPosition;
+                  let containerStyle, iconStyle, left, bottom, top, fadein, fadeout;
+                    switch(displayPosition) {
+                      case 'Bottom Right':
+                        left = '100%';
+                        bottom = '25px';
+                        break;
+                      case 'Bottom Left':
+                        left = '30%';
+                        bottom = '25px';
+                        break;
+                      case 'Bottom Center':
+                        left = '65%';
+                        bottom = '25px';
+                        break;
+                      case 'Top Left':
+                        left = '30%';
+                        top = '25px';
+                        break;
+                      case 'Top Right':
+                        left = '100%';
+                        top = '25px';
+                        break;
+                      case 'Top Center':
+                        left = '65%';
+                        top = '25px';
+                        break;
+                      default:
+                        left = '100%';
+                        bottom = '25px';
+                    }
+
+                    if(bottom) {
+                      fadein = 'fadeinBottom';
+                      fadeout = 'fadeoutBottom';
+                    } else {
+                      fadein = 'fadeinTop';
+                      fadeout = 'fadeoutTop';
+                    }
+
                   if(configuration) {
                     const panelStyle = configuration.panelStyle;
                     const backgroundColor = panelStyle.backgroundColor;
                     const borderColor = panelStyle.borderColor;
                     const color = panelStyle.color;
+
                     containerStyle = `
                       border-radius: ${panelStyle.radius}px;
                       background-color: rgb(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${backgroundColor.a});
@@ -3877,15 +3916,22 @@ var Notifications = function(config) {
                       height: ${72+panelStyle.borderWidth*2}px;
                       font-family: ${panelStyle.fontFamily};
                       font-Weight: ${panelStyle.fontWeight};
-                      -webkit-animation: fadein 0.5s, fadeout ${info.rule.displayTime*100}s;
-                      animation: fadein 0.5s, fadeout 0.5s ${info.rule.displayTime*100}s;
+                      -webkit-animation: ${fadein} 0.5s, ${fadeout} ${info.rule.displayTime*100}s;
+                      animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*100}s;
                       visibility: visible;
+                      left: ${left};
+                      bottom: ${bottom};
+                      top: ${top};
                     `;
                     iconStyle = `border-radius: ${panelStyle.radius}px;`;
                   } else {
                     containerStyle = `
-                      animation: fadein 0.5s, fadeout 0.5s ${info.rule.displayTime*100}s;
+                      -webkit-animation: ${fadein} 0.5s, ${fadeout} ${info.rule.displayTime*100}s;
+                      animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*100}s;
                       visibility: visible;
+                      left: ${left};
+                      bottom: ${bottom};
+                      top: ${top};
                     `;
                   }
                   note[splittedUrls[i]](info, containerStyle, iconStyle);
@@ -4149,7 +4195,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
 
     function displayNotification(container, config) {
       var link = document.createElement("link");
-      link.href = "note.css";
+      link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
       link.type = "text/css";
       link.rel = "stylesheet";
       link.id = "stylesheetID"
