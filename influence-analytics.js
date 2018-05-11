@@ -3846,59 +3846,65 @@ var Notifications = function(config) {
   var splittedUrls = ["live", "identification", "journey"];
 
   function loopThroughSplittedNotifications(splittedUrls) {
+    var link = document.createElement("link");
+    link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
+    link.type = "text/css";
+    link.rel = "stylesheet";
+    link.id = "stylesheetID"
+    document.getElementsByTagName("head")[0].appendChild(link);
+
     for (var i = 0; i < splittedUrls.length; i++) {
       (function (i) {
         var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
-          console.log(url);
           httpGetAsync(url, function(res) {
             response = JSON.parse(res);
             if (!response.message.error) {
               const info = response.message;
               const rule = info.rule;
               console.log(response);
+
               // if(rule.displayNotifications)
                 setTimeout(function() {
                   var note = new Note({});
                   const configuration = info.configuration;
                   const displayPosition = info.rule.displayPosition;
-                  let containerStyle, iconStyle, left, bottom, top, fadein, fadeout;
-                    switch(displayPosition) {
-                      case 'Bottom Right':
-                        left = '100%';
-                        bottom = '25px';
-                        break;
-                      case 'Bottom Left':
-                        left = '30%';
-                        bottom = '25px';
-                        break;
-                      case 'Bottom Center':
-                        left = '65%';
-                        bottom = '25px';
-                        break;
-                      case 'Top Left':
-                        left = '30%';
-                        top = '25px';
-                        break;
-                      case 'Top Right':
-                        left = '100%';
-                        top = '25px';
-                        break;
-                      case 'Top Center':
-                        left = '65%';
-                        top = '25px';
-                        break;
-                      default:
-                        left = '100%';
-                        bottom = '25px';
-                    }
-
-                    if(bottom) {
+                  let containerStyle, iconStyle, alignment, left, bottom, top, fadein, fadeout;
+                  switch(displayPosition) {
+                    case 'Bottom Right':
+                      alignment = "z-index: 10000; position: fixed; right: 10px; bottom: 0px;";
                       fadein = 'fadeinBottom';
                       fadeout = 'fadeoutBottom';
-                    } else {
+                      break;
+                    case 'Bottom Left':
+                      alignment = "z-index: 10000; position: fixed; left: 0px; bottom: 0px;";
+                      fadein = 'fadeinBottom';
+                      fadeout = 'fadeoutBottom';
+                      break;
+                    case 'Bottom Center':
+                      alignment = "z-index: 10000; position: fixed; left: 50%; transform: translate(-50%, 0); bottom: 0px;";
+                      fadein = 'fadeinBottom';
+                      fadeout = 'fadeoutBottom';
+                      break;
+                    case 'Top Left':
+                      alignment = "z-index: 10000; position: fixed; left: 0px; top: 10px;";
                       fadein = 'fadeinTop';
                       fadeout = 'fadeoutTop';
-                    }
+                      break;
+                    case 'Top Right':
+                      alignment = "z-index: 10000; position: fixed; right: 10px; top: 10px;";
+                      fadein = 'fadeinTop';
+                      fadeout = 'fadeoutTop';
+                      break;
+                    case 'Top Center':
+                      alignment = "z-index: 10000; position: fixed; left: 50%; transform: translate(-50%, 0); top: 10px;";
+                      fadein = 'fadeinTop';
+                      fadeout = 'fadeoutTop';
+                      break;
+                    default:
+                      alignment = "z-index: 10000; position: fixed; left: 0px; bottom: 0px;";
+                      fadein = 'fadeinBottom';
+                      fadeout = 'fadeoutBottom';
+                  }
 
                   if(configuration) {
                     const panelStyle = configuration.panelStyle;
@@ -3916,26 +3922,18 @@ var Notifications = function(config) {
                       height: ${72+panelStyle.borderWidth*2}px;
                       font-family: ${panelStyle.fontFamily};
                       font-Weight: ${panelStyle.fontWeight};
-                      -webkit-animation: ${fadein} 0.5s, ${fadeout} ${info.rule.displayTime*100}s;
-                      animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*100}s;
-                      visibility: visible;
-                      left: ${left};
-                      bottom: ${bottom};
-                      top: ${top};
+                      -webkit-animation: ${fadein} 0.5s, ${fadeout} ${info.rule.displayTime*1000}s;
+                      animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
                     `;
                     iconStyle = `border-radius: ${panelStyle.radius}px;`;
                   } else {
                     containerStyle = `
-                      -webkit-animation: ${fadein} 0.5s, ${fadeout} ${info.rule.displayTime*100}s;
-                      animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*100}s;
-                      visibility: visible;
-                      left: ${left};
-                      bottom: ${bottom};
-                      top: ${top};
+                      -webkit-animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
+                      animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
                     `;
                   }
-                  note[splittedUrls[i]](info, containerStyle, iconStyle);
-                }, rule.initialDelay+rule.delayBetween*(i+1)*100);
+                  note.notificationdisplay(splittedUrls[i], info, containerStyle, iconStyle, alignment);
+                }, rule.initialDelay+rule.delayBetween*(i+1)*1000);
             } else {
               console.log('Send data to us using websocket ')
             }
@@ -4080,146 +4078,170 @@ function timeSince(time) {
 
 var Note = function Note(config, containerStyle, iconStyle) {
 
-    function liveNotification(config, containerStyle, iconStyle) {
-      var container = document.createElement('div');
-      container.setAttribute("id", "influence-notification-container");
-      container.style = containerStyle;
-        var icon = document.createElement('div');
-        icon.className = "influence-dot-container";
-          var icon_p = document.createElement('p');
-            icon_p.className = "influence-dot";
-            icon_p.style = iconStyle;
-            icon.appendChild(icon_p);
-        var content = document.createElement('div');
-          content.className = "influence-content";
-          var content_p = document.createElement('p');
-            content_p.className = "influence-heading";
-            var p_span = document.createElement('span');
-              p_span.className = "influence-peopleCount";
-              p_span.innerHTML = config.response.hits.total;
-            var text_span = document.createTextNode(" are viewing this site");
-          content_p.appendChild(p_span);
-          content_p.appendChild(text_span);
-          var content_div = document.createElement('div');
-            content_div.className = "influence-verified";
-            var verified_pre = document.createElement('pre');
-              verified_pre.className = "influence-verified-content";
-              verified_pre.innerHTML = "verified by ";
-            var div_pre = document.createElement('pre');
-              div_pre.className = "verified-content-influence";
-              div_pre.innerHTML = "Influence";
-          content_div.appendChild(verified_pre);
-          content_div.appendChild(div_pre);
-        content.appendChild(content_p);
-        content.appendChild(content_div);
-      container.appendChild(icon);
-      container.appendChild(content);
-      displayNotification(container, config);
-    };
-
-    function signUpNotification(config, containerStyle, iconStyle) {
-      var container = document.createElement('div');
-      container.setAttribute("id","influence-notification-container")
-      container.style = containerStyle;
-        var icon = document.createElement('div');
-        icon.className = "influence-dot-container";
-          var icon_p = document.createElement('p');
-          icon_p.className = "influence-dot-s";
-          icon_p.style = iconStyle;
-          icon.appendChild(icon_p);
-        var content = document.createElement('div');
-        content.className = "influence-content";
-        var content_p = document.createElement('p');
-          content_p.className = "influence-heading-bulksignup";
-            var p_span = document.createElement('span');
-            p_span.className = "influence-peopleCount";
-            p_span.style = "color: #2f95f7;";
-            p_span.innerHTML = config.response.hits.total;
-            var text_span = document.createTextNode(" signed up for");
-          content_p.appendChild(p_span);
-          content_p.appendChild(text_span);
-        var content_div = document.createElement('div');
-        content_div.className = "influence-verified";
-          var div_pre = document.createElement('pres2');
-            div_pre.innerHTML = "Influence in the last 7 days";
-          content_div.appendChild(div_pre);
-        content.appendChild(content_p);
-        content.appendChild(content_div);
-      container.appendChild(icon);
-      container.appendChild(content);
-      displayNotification(container, config);
-    };
-
-    function recentNotification(config, containerStyle, iconStyle) {
-      var container = document.createElement('div');
-      container.setAttribute("id", "influence-notification-container");
-      container.style = containerStyle;
-        var icon = document.createElement('div');
-        icon.className = "influence-icon-container";
-          var icon_p = document.createElement('img');
-          icon_p.className = "influence-icon-img";
-          icon_p.style = iconStyle;
-          var res_img = config.userDetails.profile_pic;
-          icon_p.src = res_img?res_img:"https://media1.popsugar-assets.com/files/thumbor/f6mR3MTC66MfnZFc0qGrgcnZ_fg/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2017/12/19/048/n/1922441/tmp_f17bIy_7aef35b1ab387138_k.jpg";
-          icon.appendChild(icon_p);
-        var content = document.createElement('div');
-        content.className = "influence-recent-content";
-          var content_heading = document.createElement('p');
-            content_heading.className = "influence-recent-heading";
-            var res_name = config.userDetails.username;
-            content_heading.innerHTML = res_name?res_name:"Nataila from Itaboral, RJ";
-          var content_verified = document.createElement('div');
-            content_verified.className = "influence-recent-verified";
-            var div_pre = document.createElement('pre');
-              div_pre.className = "influence-verified-content-pre";
-              div_pre.innerHTML = "Recently signed up for Influence";
-            var verified_bottom = document.createElement('div');
-              verified_bottom.className = "influence-verified-bottom";
-              var verified_content = document.createElement('pre');
-                verified_content.className = "influence-verified-content";
-                var timeStamp = config.userDetails.timestamp;
-                verified_content.innerHTML = timeStamp?timeSince(new Date(new Date()-new Date(timeStamp))):"Not available ";
-              var verified_pre = document.createElement('pre');
-                verified_pre.className = "influence-verified-content-pre2";
-                verified_pre.innerHTML = " by Influence";
-            verified_bottom.appendChild(verified_content);
-            verified_bottom.appendChild(verified_pre);
-          content_verified.appendChild(div_pre);
-          content_verified.appendChild(verified_bottom);
-        content.appendChild(content_heading);
-        content.appendChild(content_verified);
-      container.appendChild(icon);
-      container.appendChild(content);
-      displayNotification(container, config);
-    };
-
     function displayNotification(container, config) {
-      var link = document.createElement("link");
-      link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
-      link.type = "text/css";
-      link.rel = "stylesheet";
-      link.id = "stylesheetID"
-      document.getElementsByTagName("head")[0].appendChild(link);
-      container.className = "influence-show";
-      // container.style = `animation:fadein 0.5s, fadeout 0.5s ${config.rule.displayTime*100}s; visibility: visible;`;
       setTimeout(function() {
-        container.className = container.className.replace("influence-show", "");
+        // container.style = "transition: 100px .35s ease-in-out;"
         container.parentNode.removeChild(container)
-        var stylesheet = document.getElementById('stylesheetID');
-        stylesheet.parentNode.removeChild(stylesheet);
-      }, config.rule.displayTime*100);
+      }, (config.rule.displayTime*1000));
       document.body.appendChild(container);
     };
 
+    function notificationDisplay(type, config, containerStyle, iconStyle, alignment) {
+      var container = document.createElement('div');
+      container.setAttribute("id", "FPqR2DbIqJeA2DbI7MM9_0");
+      container.style = alignment;
+        var innerContainer = document.createElement('div');
+        innerContainer.setAttribute("id", "FPqR3tRBqJeA3tRB7MM9_0");
+          var innerDiv = document.createElement('div');
+            var mainContainer = document.createElement('div');
+
+              var notificationRecentContainer = document.createElement('div');
+              notificationRecentContainer.style = type=='journey'?"display:block":"display:none";
+                var innerNotifRecentContainer = document.createElement('div');
+                innerNotifRecentContainer.setAttribute("id", "FPqR2fZIqJeA2fZI7MM9_0");
+                  var innerInnerNotifRecentContainer = document.createElement('div');
+                  innerInnerNotifRecentContainer.className = "FPqR3zjZqJeA3zjZ7MM9_0 FPqR2riIqJeA2riI7MM9_0";
+                  innerInnerNotifRecentContainer.style = containerStyle;
+
+                    var notifRecentImgContainer = document.createElement('div');
+                    notifRecentImgContainer.className = "FPqR1JYFqJeA1JYF7MM9_0";
+                      var notifRecentImg = document.createElement('img');
+                      var res_img = config.userDetails?config.userDetails.profile_pic:null;
+                      notifRecentImg.setAttribute('src', res_img?res_img:"https://media1.popsugar-assets.com/files/thumbor/f6mR3MTC66MfnZFc0qGrgcnZ_fg/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2017/12/19/048/n/1922441/tmp_f17bIy_7aef35b1ab387138_k.jpg");
+                      notifRecentImg.style = iconStyle;
+                    notifRecentImgContainer.appendChild(notifRecentImg);
+                    var notifRecentContentContainer = document.createElement('div');
+                    notifRecentContentContainer.className = "FPqR2EbCqJeA2EbC7MM9_0";
+                      var notifRecentContentI = document.createElement('div');
+                      notifRecentContentI.className = "FPqR2AUlqJeA2AUl7MM9_0";
+                      var res_name = config.userDetails?config.userDetails.username:null;
+                      notifRecentContentI.innerHTML = res_name?res_name:"Nataila from Itaboral, RJ";
+                      var notifRecentContentII = document.createElement('div');
+                      notifRecentContentII.className = "FPqR13BWqJeA13BW7MM9_0";
+                      notifRecentContentII.innerHTML = "Recently signed up for Influnece"
+                      var notifRecentContentIII = document.createElement('div');
+                      notifRecentContentIII.className = "FPqR2PlWqJeA2PlW7MM9_0";
+                      var timeStamp = config.userDetails?config.userDetails.timestamp:null;
+                      notifRecentContentIII.innerHTML = timeStamp?timeSince(new Date(new Date()-new Date(timeStamp))):"Not available ";
+                      var notifRecentContentIV = document.createElement('div');
+                      notifRecentContentIV.className = "FPqR3eNuqJeA3eNu7MM9_0";
+                        // var notifRecentContentIVInnerI = document.createElement('i');
+                        //   var notifRecentContentSvg = document.createElement('svg');
+                        var notifRecentContentIVSpan1 = document.createElement('span');
+                        notifRecentContentIVSpan1.innerHTML = "by ";
+                        var notifRecentContentIVSpan2 = document.createElement('span');
+                        notifRecentContentIVSpan2.className = "FPqR12wMqJeA12wM7MM9_0";
+                        notifRecentContentIVSpan2.innerHTML = "Influence";
+                      notifRecentContentIV.appendChild(notifRecentContentIVSpan1);
+                      notifRecentContentIV.appendChild(notifRecentContentIVSpan2);
+                    notifRecentContentContainer.appendChild(notifRecentContentI);
+                    notifRecentContentContainer.appendChild(notifRecentContentII);
+                    notifRecentContentContainer.appendChild(notifRecentContentIII);
+                    notifRecentContentContainer.appendChild(notifRecentContentIV);
+                  innerInnerNotifRecentContainer.appendChild(notifRecentImgContainer);
+                  innerInnerNotifRecentContainer.appendChild(notifRecentContentContainer);
+                innerNotifRecentContainer.appendChild(innerInnerNotifRecentContainer);
+              notificationRecentContainer.appendChild(innerNotifRecentContainer);
+
+              var notificationLiveContainer = document.createElement('div');
+              notificationLiveContainer.style = type=='live'?"display:block":"display:none";
+                var innerNotifLiveContainer = document.createElement('div');
+                innerNotifLiveContainer.setAttribute("id", "FPqR3dGiqJeA3dGi7MM9_0");
+                  var innerInnerNotifLiveContainer = document.createElement('div');
+                  innerInnerNotifLiveContainer.className = "FPqR2B_4qJeA2B_47MM9_0 rounded FPqRD2zVqJeAD2zV7MM9_0";
+                  innerInnerNotifLiveContainer.style = containerStyle;
+                    var innerMainNotifLiveContainer = document.createElement('div');
+                    innerMainNotifLiveContainer.setAttribute('id', "FPqR3acHqJeA3acH7MM9_0");
+
+                      var notifLiveImgContainer = document.createElement('div');
+                      notifLiveImgContainer.className = "FPqRH0WDqJeAH0WD7MM9_0";
+                        var notifLiveImg = document.createElement('div');
+                        notifLiveImg.className =  "FPqRh0ePqJeAh0eP7MM9_0";
+                      notifLiveImgContainer.appendChild(notifLiveImg);
+
+                      var notifLiveContentContainerI = document.createElement('div');
+                      notifLiveContentContainerI.className = "FPqR15RvqJeA15Rv7MM9_0";
+                        var notifLiveContentInnerContainer = document.createElement('div');
+                        notifLiveContentInnerContainer.className = "FPqR2fwXqJeA2fwX7MM9_0";
+                          var notifLiveContentSpan = document.createElement('span');
+                          notifLiveContentSpan.className = "FPqR1Jr6qJeA1Jr67MM9_0";
+                            var notifLiveContentInnerSpan = document.createElement('span');
+                            notifLiveContentInnerSpan.innerHTML = config.response.hits.total;
+                            var text_span = document.createTextNode(" people");
+                          notifLiveContentSpan.appendChild(notifLiveContentInnerSpan);
+                          notifLiveContentSpan.appendChild(text_span);
+                          var text_div = document.createTextNode(" are viewing this site");
+                        notifLiveContentInnerContainer.appendChild(notifLiveContentSpan);
+                      notifLiveContentContainerI.appendChild(notifLiveContentInnerContainer);
+                      notifLiveContentContainerI.appendChild(text_div);
+
+                      var notifLiveContentContainerII = document.createElement('div');
+                      notifLiveContentContainerII.className = "FPqR14UVqJeA14UV7MM9_0";
+                        var text_ContainerII = document.createTextNode('Verified by ');
+                        var notifLiveContentA = document.createElement('a');
+                        notifLiveContentA.setAttribute('href', 'https://useinfluence.co');
+                        notifLiveContentA.setAttribute('rel', 'nofollow');
+                        notifLiveContentA.setAttribute('target', '_blank');
+                        var createAText = document.createTextNode('Influence');
+                        notifLiveContentA.appendChild(createAText);
+                      notifLiveContentContainerII.appendChild(text_ContainerII);
+                      notifLiveContentContainerII.appendChild(notifLiveContentA);
+
+                    innerMainNotifLiveContainer.appendChild(notifLiveImgContainer);
+                    innerMainNotifLiveContainer.appendChild(notifLiveContentContainerI);
+                    innerMainNotifLiveContainer.appendChild(notifLiveContentContainerII);
+
+                  innerInnerNotifLiveContainer.appendChild(innerMainNotifLiveContainer);
+                innerNotifLiveContainer.appendChild(innerInnerNotifLiveContainer);
+              notificationLiveContainer.appendChild(innerNotifLiveContainer);
+
+              var notificationBulkContainer = document.createElement('div');
+              notificationBulkContainer.style = type=='identification'?"display:block":"display:none";
+                var innerNotifBulkContainer = document.createElement('div');
+                innerNotifBulkContainer.setAttribute("id", "FPqR2lriqJeA2lri7MM9_0");
+                  var innerInnerNotifBulkContainer = document.createElement('div');
+                  innerInnerNotifBulkContainer.className = "FPqR1XogqJeA1Xog7MM9_0 FPqR27wVqJeA27wV7MM9_0";
+                  innerInnerNotifBulkContainer.style = containerStyle;
+                    var notifBulkImgContainer = document.createElement('div');
+                    notifBulkImgContainer.className = "FPqR37xpqJeA37xp7MM9_0";
+                      var notifBulkImg = document.createElement('img');
+                      notifBulkImg.setAttribute('src', 'https://useproof.s3.amazonaws.com/turbo1/flamelite.svg')
+                    notifBulkImgContainer.appendChild(notifBulkImg);
+
+                    var notifBulkContentContainer = document.createElement('div');
+                    notifBulkContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
+                      var notifBulkContentInnerContainer = document.createElement('div');
+                        var notifBulkContentSpan = document.createElement('span');
+                        notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
+                          var notifBulkContentInnerSpan = document.createElement('span');
+                          notifBulkContentInnerSpan.innerHTML = config.response.hits.total;
+                          var notifBulkContentInnerText = document.createTextNode(' people');
+                        notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
+                        notifBulkContentSpan.appendChild(notifBulkContentInnerText);
+                        var notifBulkContentText = document.createTextNode('signed up for Influence in the last 7 days');
+                      notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
+                      notifBulkContentInnerContainer.appendChild(notifBulkContentText);
+                    notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
+
+                  innerInnerNotifBulkContainer.appendChild(notifBulkImgContainer);
+                  innerInnerNotifBulkContainer.appendChild(notifBulkContentContainer);
+
+                innerNotifBulkContainer.appendChild(innerInnerNotifBulkContainer);
+              notificationBulkContainer.appendChild(innerNotifBulkContainer);
+
+            mainContainer.appendChild(notificationRecentContainer);
+            mainContainer.appendChild(notificationLiveContainer);
+            mainContainer.appendChild(notificationBulkContainer);
+          innerDiv.appendChild(mainContainer);
+        innerContainer.appendChild(innerDiv);
+      container.appendChild(innerContainer);
+
+      displayNotification(container, config);
+    }
+
     return {
-        live: function live(config, containerStyle, iconStyle) {
-          liveNotification(config, containerStyle, iconStyle)
-        },
-        identification: function identification(config, containerStyle, iconStyle) {
-          signUpNotification(config, containerStyle, iconStyle)
-        },
-        journey: function journey(config, containerStyle, iconStyle) {
-          recentNotification(config, containerStyle, iconStyle)
+        notificationdisplay: function notificationdisplay(type, config, containerStyle, iconStyle, alignment) {
+          notificationDisplay(type, config, containerStyle, iconStyle, alignment);
         }
     };
 };
