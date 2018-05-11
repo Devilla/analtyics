@@ -3850,12 +3850,12 @@ var Notifications = function(config) {
     link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
     link.type = "text/css";
     link.rel = "stylesheet";
-    link.id = "stylesheetID"
+    link.id = "stylesheetID";
+    var j = 1;
     document.getElementsByTagName("head")[0].appendChild(link);
-
     for (var i = 0; i < splittedUrls.length; i++) {
-      (function (i) {
-        var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
+      (function (i, j) {
+        var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-azg2fhcfgjh0hvi3v' + '?type='+splittedUrls[i];
           httpGetAsync(url, function(res) {
             response = JSON.parse(res);
             if (!response.message.error) {
@@ -3864,7 +3864,7 @@ var Notifications = function(config) {
               console.log(response);
 
               // if(rule.displayNotifications)
-                setTimeout(function() {
+                setTimeout(function(j) {
                   var note = new Note({});
                   const configuration = info.configuration;
                   const displayPosition = info.rule.displayPosition;
@@ -3933,12 +3933,20 @@ var Notifications = function(config) {
                     `;
                   }
                   note.notificationdisplay(splittedUrls[i], info, containerStyle, iconStyle, alignment);
-                }, rule.initialDelay+rule.delayBetween*(i+1)*1000);
+                }, rule.initialDelay+rule.delayBetween*(j+1)*1000);
             } else {
               console.log('Send data to us using websocket ')
             }
           });
-      })(i);
+      })(i, j);
+
+      j++;
+      if(j > 20 ) {
+        i = 4;
+      }
+      if(i == splittedUrls.length-1) {
+        i = -1;
+      }
     }
   }
 
