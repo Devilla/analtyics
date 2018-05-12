@@ -3851,11 +3851,16 @@ var Notifications = function(config) {
     link.type = "text/css";
     link.rel = "stylesheet";
     link.id = "stylesheetID";
+
+    var MomentCDN = document.createElement('script');
+    MomentCDN.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js');
+    document.head.appendChild(MomentCDN);
+
     var j = 1;
     document.getElementsByTagName("head")[0].appendChild(link);
     for (var i = 0; i < splittedUrls.length; i++) {
       (function (i, j) {
-        var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-azg2fhcfgjh0hvi3v' + '?type='+splittedUrls[i];
+        var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
           httpGetAsync(url, function(res) {
             response = JSON.parse(res);
             if (!response.message.error) {
@@ -3863,7 +3868,7 @@ var Notifications = function(config) {
               const rule = info.rule;
               console.log(response);
 
-              // if(rule.displayNotifications)
+              // if(info.configuration)
                 setTimeout(function(j) {
                   var note = new Note({});
                   const configuration = info.configuration;
@@ -4115,7 +4120,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                     notifRecentImgContainer.className = "FPqR1JYFqJeA1JYF7MM9_0";
                       var notifRecentImg = document.createElement('img');
                       var res_img = config.userDetails?config.userDetails.profile_pic:null;
-                      notifRecentImg.setAttribute('src', res_img?res_img:"https://media1.popsugar-assets.com/files/thumbor/f6mR3MTC66MfnZFc0qGrgcnZ_fg/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2017/12/19/048/n/1922441/tmp_f17bIy_7aef35b1ab387138_k.jpg");
+                      notifRecentImg.setAttribute('src', res_img?res_img:"https://www.totaldenturecare.com.au/wp-content/uploads/2017/06/default-user-image-female.png");
                       notifRecentImg.style = iconStyle;
                     notifRecentImgContainer.appendChild(notifRecentImg);
                     var notifRecentContentContainer = document.createElement('div');
@@ -4126,11 +4131,11 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       notifRecentContentI.innerHTML = res_name?res_name:"Nataila from Itaboral, RJ";
                       var notifRecentContentII = document.createElement('div');
                       notifRecentContentII.className = "FPqR13BWqJeA13BW7MM9_0";
-                      notifRecentContentII.innerHTML = "Recently signed up for Influnece"
+                      notifRecentContentII.innerHTML = `Recently signed up for ${config.rule.companyName}`
                       var notifRecentContentIII = document.createElement('div');
                       notifRecentContentIII.className = "FPqR2PlWqJeA2PlW7MM9_0";
                       var timeStamp = config.userDetails?config.userDetails.timestamp:null;
-                      notifRecentContentIII.innerHTML = timeStamp?timeSince(new Date(new Date()-new Date(timeStamp))):"Not available ";
+                      notifRecentContentIII.innerHTML = timeStamp?moment(timeStamp).fromNow():"Not available ";
                       var notifRecentContentIV = document.createElement('div');
                       notifRecentContentIV.className = "FPqR3eNuqJeA3eNu7MM9_0";
                         // var notifRecentContentIVInnerI = document.createElement('i');
@@ -4226,7 +4231,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                           var notifBulkContentInnerText = document.createTextNode(' people');
                         notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
                         notifBulkContentSpan.appendChild(notifBulkContentInnerText);
-                        var notifBulkContentText = document.createTextNode('signed up for Influence in the last 7 days');
+                        var notifBulkContentText = document.createTextNode(`signed up for ${config.rule.companyName} in the last 7 days`);
                       notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
                       notifBulkContentInnerContainer.appendChild(notifBulkContentText);
                     notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
