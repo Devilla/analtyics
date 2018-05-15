@@ -4038,11 +4038,24 @@ var Note = function Note(config, containerStyle, iconStyle) {
 
     function displayNotification(container, config) {
       setTimeout(function() {
-        // container.style = "transition: 100px .35s ease-in-out;"
-        container.parentNode.removeChild(container)
-      }, (config.rule.displayTime*1000));
+        // container.parentNode.removeChild(container)
+        fadeOut(container);
+    }, (config.rule.displayTime*1000));
       document.body.appendChild(container);
     };
+
+    function fadeOut(element) {
+      var op = 1;  // initial opacity
+      var timer = setInterval(function () {
+        if (op <= 0.1){
+            clearInterval(timer);
+            element.style.display = 'none';
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+      }, 50);
+    }
 
     function notificationDisplay(type, config, containerStyle, iconStyle, alignment) {
       var container = document.createElement('div');
