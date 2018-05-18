@@ -3830,6 +3830,7 @@ if (typeof Influence === 'undefined') {
 
 
 var InfluenceTracker = function(config) {
+
     if (!(this instanceof InfluenceTracker)) return new InfluenceTracker(config);
 
     this.config = config;
@@ -3842,7 +3843,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-azg2fhcfgjh0hvi3v';
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
@@ -3876,7 +3877,7 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
       return;
     }
     (function (i, j) {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-azg2fhcfgjh0hvi3v' + '?type='+splittedUrls[i];
         httpGetAsync(url, function(res) {
           response = JSON.parse(res);
           if (!response.message.error) {
@@ -4066,7 +4067,11 @@ var Note = function Note(config, containerStyle, iconStyle) {
       setTimeout(function() {
         // container.parentNode.removeChild(container)
         fadeOut(container);
+
     }, (config.rule.displayTime*1000));
+      setTimeout(function() {
+        container.parentNode.removeChild(container)
+      }, (config.rule.displayTime*1000+2000));
       document.body.appendChild(container);
     };
 
@@ -4084,6 +4089,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
     }
 
     function notificationDisplay(type, config, containerStyle, iconStyle, alignment) {
+
       var container = document.createElement('div');
       container.setAttribute("id", "FPqR2DbIqJeA2DbI7MM9_0");
       container.style = alignment;
