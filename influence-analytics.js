@@ -3841,123 +3841,149 @@ var InfluenceTracker = function(config) {
 var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
-  console.log("This is notifications " + config);
+  var rule, notificationPath;
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+  httpGetAsync(rulesUrl, function(res) {
+    response = JSON.parse(res);
+    rule = response.rule;
+    notificationPath = response.notificationPath;
+    console.log(notificationPath, "=====path");
+    var splittedUrls = ["live", "identification", "journey"];
+    notificationPath = notificationPath.map(notifPath => notifPath.url);
+    if(rule && notificationPath.indexOf(window.location.pathname) != -1) {
+      loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config);
+    }
+  });
+};
 
-  var splittedUrls = ["live", "identification", "journey"];
+function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config) {
+  var link = document.createElement("link");
+  link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
+  link.type = "text/css";
+  link.rel = "stylesheet";
+  link.id = "stylesheetID";
+  document.getElementsByTagName("head")[0].appendChild(link);
 
-  function loopThroughSplittedNotifications(splittedUrls) {
-    var link = document.createElement("link");
-    link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
-    link.type = "text/css";
-    link.rel = "stylesheet";
-    link.id = "stylesheetID";
+  var MomentCDN = document.createElement('script');
+  MomentCDN.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js');
+  document.head.appendChild(MomentCDN);
 
-    var MomentCDN = document.createElement('script');
-    MomentCDN.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js');
-    document.head.appendChild(MomentCDN);
-
-    var j = 1;
-    document.getElementsByTagName("head")[0].appendChild(link);
-    for (var i = 0; i < splittedUrls.length; i++) {
-      (function (i, j) {
-        var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
-          httpGetAsync(url, function(res) {
-            response = JSON.parse(res);
-            if (!response.message.error) {
-              const info = response.message;
-              const rule = info.rule;
-              console.log(response);
-
-              // if(info.configuration)
-                setTimeout(function(j) {
-                  var note = new Note({});
-                  const configuration = info.configuration;
-                  const displayPosition = info.rule.displayPosition;
-                  let containerStyle, iconStyle, alignment, left, bottom, top, fadein, fadeout;
-                  switch(displayPosition) {
-                    case 'Bottom Right':
-                      alignment = "z-index: 10000; position: fixed; right: 10px; bottom: 0px;";
-                      fadein = 'fadeinBottom';
-                      fadeout = 'fadeoutBottom';
-                      break;
-                    case 'Bottom Left':
-                      alignment = "z-index: 10000; position: fixed; left: 0px; bottom: 0px;";
-                      fadein = 'fadeinBottom';
-                      fadeout = 'fadeoutBottom';
-                      break;
-                    case 'Bottom Center':
-                      alignment = "z-index: 10000; position: fixed; left: 50%; transform: translate(-50%, 0); bottom: 0px;";
-                      fadein = 'fadeinBottom';
-                      fadeout = 'fadeoutBottom';
-                      break;
-                    case 'Top Left':
-                      alignment = "z-index: 10000; position: fixed; left: 0px; top: 10px;";
-                      fadein = 'fadeinTop';
-                      fadeout = 'fadeoutTop';
-                      break;
-                    case 'Top Right':
-                      alignment = "z-index: 10000; position: fixed; right: 10px; top: 10px;";
-                      fadein = 'fadeinTop';
-                      fadeout = 'fadeoutTop';
-                      break;
-                    case 'Top Center':
-                      alignment = "z-index: 10000; position: fixed; left: 50%; transform: translate(-50%, 0); top: 10px;";
-                      fadein = 'fadeinTop';
-                      fadeout = 'fadeoutTop';
-                      break;
-                    default:
-                      alignment = "z-index: 10000; position: fixed; left: 0px; bottom: 0px;";
-                      fadein = 'fadeinBottom';
-                      fadeout = 'fadeoutBottom';
-                  }
-
-                  if(configuration) {
-                    const panelStyle = configuration.panelStyle;
-                    const backgroundColor = panelStyle.backgroundColor;
-                    const borderColor = panelStyle.borderColor;
-                    const color = panelStyle.color;
-
-                    containerStyle = `
-                      border-radius: ${panelStyle.radius}px;
-                      background-color: rgb(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${backgroundColor.a});
-                      border-color: rgb(${borderColor.r}, ${borderColor.g}, ${borderColor.b}, ${borderColor.a});
-                      box-shadow: rgb(0, 0, 0) ${panelStyle.shadow}px ${panelStyle.shadow}px ${panelStyle.blur}px;
-                      color: rgb(${color.r}, ${color.g}, ${color.b});
-                      border-width: ${panelStyle.borderWidth}px;
-                      height: ${72+panelStyle.borderWidth*2}px;
-                      font-family: ${panelStyle.fontFamily};
-                      font-Weight: ${panelStyle.fontWeight};
-                      -webkit-animation: ${fadein} 0.5s, ${fadeout} ${info.rule.displayTime*1000}s;
-                      animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
-                    `;
-                    iconStyle = `border-radius: ${panelStyle.radius}px;`;
-                  } else {
-                    containerStyle = `
-                      -webkit-animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
-                      animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
-                    `;
-                  }
-                  note.notificationdisplay(splittedUrls[i], info, containerStyle, iconStyle, alignment);
-                }, rule.initialDelay+rule.delayBetween*(j+1)*1000);
-            } else {
-              console.log('Send data to us using websocket ')
+  var j = 1;
+  var loopCheckValue = rule.loopNotification?50:3;
+  for (var i = 0; i < splittedUrls.length; i++) {
+    if(j >  loopCheckValue) {
+      i = 4;
+      return;
+    }
+    (function (i, j) {
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
+        httpGetAsync(url, function(res) {
+          response = JSON.parse(res);
+          if (!response.message.error) {
+            const info = response.message;
+            console.log(info, "=========>info");
+            if((splittedUrls[i] == 'journey' && !info.userDetails) || (splittedUrls[i] == 'identification' && info.response.hits.total == 0)) {
+              return;
             }
-          });
-      })(i, j);
+            if(info.configuration && info.configuration.activity) {
+              if(j == 1)
+                setTimeout(function(){
+                  return notificationTimeout(i, info, rule, splittedUrls, notificationPath);
+                }, (rule.initialDelay)*1000);
+              else
+                setTimeout(function(){
+                  return notificationTimeout(i, info, rule, splittedUrls, notificationPath);
+                }, ((rule.displayTime+rule.delayBetween)*(j))*1000);
+            } else {
+              j = j-1;
+            }
+          } else {
+            console.log('Send data to us using websocket ')
+          }
+        });
+    })(i, j);
 
-      j++;
-      if(j > 20 ) {
-        i = 4;
-      }
-      if(i == splittedUrls.length-1) {
-        i = -1;
-      }
+    j++;
+
+    if(i == splittedUrls.length-1) {
+      i = -1;
     }
   }
+}
 
-  loopThroughSplittedNotifications(splittedUrls);
+function notificationTimeout(i, info, rule, splittedUrls, notificationPath) {
+    if(notificationPath.indexOf(window.location.pathname) === -1)
+      return;
+    var note = new Note({});
+    const configuration = info.configuration;
+    const displayPosition = info.rule.displayPosition;
+    let containerStyle, iconStyle, alignment, left, bottom, top, fadein, fadeout;
+    switch(displayPosition) {
+      case 'Bottom Right':
+        alignment = "z-index: 10000; position: fixed; right: 10px; bottom: 0px;";
+        fadein = 'fadeinBottom';
+        fadeout = 'fadeoutBottom';
+        break;
+      case 'Bottom Left':
+        alignment = "z-index: 10000; position: fixed; left: 0px; bottom: 0px;";
+        fadein = 'fadeinBottom';
+        fadeout = 'fadeoutBottom';
+        break;
+      case 'Bottom Center':
+        alignment = "z-index: 10000; position: fixed; left: 50%; transform: translate(-50%, 0); bottom: 0px;";
+        fadein = 'fadeinBottom';
+        fadeout = 'fadeoutBottom';
+        break;
+      case 'Top Left':
+        alignment = "z-index: 10000; position: fixed; left: 0px; top: 10px;";
+        fadein = 'fadeinTop';
+        fadeout = 'fadeoutTop';
+        break;
+      case 'Top Right':
+        alignment = "z-index: 10000; position: fixed; right: 10px; top: 10px;";
+        fadein = 'fadeinTop';
+        fadeout = 'fadeoutTop';
+        break;
+      case 'Top Center':
+        alignment = "z-index: 10000; position: fixed; left: 50%; transform: translate(-50%, 0); top: 10px;";
+        fadein = 'fadeinTop';
+        fadeout = 'fadeoutTop';
+        break;
+      default:
+        alignment = "z-index: 10000; position: fixed; left: 0px; bottom: 0px;";
+        fadein = 'fadeinBottom';
+        fadeout = 'fadeoutBottom';
+    }
 
-};
+    if(configuration) {
+      const panelStyle = configuration.panelStyle;
+      const backgroundColor = panelStyle.backgroundColor;
+      const borderColor = panelStyle.borderColor;
+      const color = panelStyle.color;
+
+      containerStyle = `
+        border-radius: ${panelStyle.radius}px !important;
+        background-color: rgb(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${backgroundColor.a});
+        border-color: rgb(${borderColor.r}, ${borderColor.g}, ${borderColor.b}, ${borderColor.a});
+        box-shadow: rgb(0, 0, 0) ${panelStyle.shadow}px ${panelStyle.shadow}px ${panelStyle.blur}px;
+        color: rgb(${color.r}, ${color.g}, ${color.b});
+        border-width: ${panelStyle.borderWidth}px;
+        height: ${72+panelStyle.borderWidth*2}px;
+        font-family: ${panelStyle.fontFamily};
+        font-Weight: ${panelStyle.fontWeight};
+        -webkit-animation: ${fadein} 0.5s, ${fadeout} ${info.rule.displayTime*1000}s;
+        animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
+      `;
+      iconStyle = `border-radius: ${panelStyle.radius}px;`;
+    } else {
+      containerStyle = `
+        -webkit-animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
+        animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
+      `;
+    }
+    note.notificationdisplay(splittedUrls[i], info, containerStyle, iconStyle, alignment);
+  // }
+}
 
 function httpGetAsync(theUrl, callback) {
     var xmlHttp = new XMLHttpRequest();
