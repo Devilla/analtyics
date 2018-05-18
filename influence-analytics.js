@@ -9,36 +9,38 @@ if (typeof Influence === 'undefined') {
      *
      */
     var Influence = function(options) {
-        if (!(this instanceof Influence)) return new Influence(config);
+      if (!(this instanceof Influence)) return new Influence(config);
+      /**
+       * New InfluenceTracker()
+       * @type {{tracker}|{}}
+       */
+      checkCampaignActive(options.trackingId, (err, res) => {
+        if(err)
+          return;
+        if(res.isActive) {
+          tracker = new InfluenceTracker(options.trackingId);
 
-        /**
-         * New InfluenceTracker()
-         * @type {{tracker}|{}}
-         */
-
-        tracker = new InfluenceTracker(options.trackingId);
-
-        /**
-         * New InfluenceNotification()
-         * @type {{Notifications}}
-         */
-         var notificationTimmer = setInterval( function () {
-              if ( document.readyState !== 'complete' ) return;
-              notifications = new Notifications(options.trackingId);
-              this.notificationsInstance = notifications;
-              clearInterval( notificationTimmer );
-              // do your work
+          /**
+           * New InfluenceNotification()
+           * @type {{Notifications}}
+           */
+          var notificationTimmer = setInterval( function () {
+            if ( document.readyState !== 'complete' ) return;
+            notifications = new Notifications(options.trackingId);
+            this.notificationsInstance = notifications;
+            clearInterval( notificationTimmer );
+            // do your work
           }, 100 );
 
+          options = options || {};
 
+          this.options    = options;
 
-        options = options || {};
+          this.trackerInstance    = tracker;
 
-        this.options    = options;
-
-        this.trackerInstance    = tracker;
-
-        this.initialize();
+          this.initialize();
+        }
+      });
     };
 
     (function(Influence) {
@@ -3828,15 +3830,23 @@ if (typeof Influence === 'undefined') {
 }
 
 
+var checkCampaignActive = function(config, cb) {
+  var url = 'https://strapi.useinfluence.co/campaign/track/INF-azg2fhcfgjh0hvi3v';
+  httpGetAsync(url, function(res) {
+    response = JSON.parse(res);
+    if(response)
+      cb(null, response);
+    else
+      cb(true);
+  });
+}
 
 var InfluenceTracker = function(config) {
+  if (!(this instanceof InfluenceTracker)) return new InfluenceTracker(config);
 
-    if (!(this instanceof InfluenceTracker)) return new InfluenceTracker(config);
+  this.config = config;
 
-    this.config = config;
-
-    console.log(config);
-
+  console.log(config);
 };
 
 var Notifications = function(config) {
