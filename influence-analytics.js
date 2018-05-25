@@ -3831,7 +3831,7 @@ if (typeof Influence === 'undefined') {
 
 
 var checkCampaignActive = function(config, cb) {
-  var url = 'https://strapi.useinfluence.co/campaign/track/INF-azg2fhcfgjh0hvi3v';
+  var url = 'https://strapi.useinfluence.co/campaign/track/' + config;
   httpGetAsync(url, function(res) {
     response = JSON.parse(res);
     if(response)
@@ -3853,7 +3853,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-azg2fhcfgjh0hvi3v';
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
@@ -3887,7 +3887,7 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
       return;
     }
     (function (i, j) {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-azg2fhcfgjh0hvi3v' + '?type='+splittedUrls[i];
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
         httpGetAsync(url, function(res) {
           response = JSON.parse(res);
           if (!response.message.error) {
