@@ -4138,14 +4138,17 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       notifRecentContentIII.innerHTML = timeStamp?moment(timeStamp).fromNow():"Not available ";
                       var notifRecentContentIV = document.createElement('div');
                       notifRecentContentIV.className = "FPqR3eNuqJeA3eNu7MM9_0";
-                        // var notifRecentContentIVInnerI = document.createElement('i');
-                        //   var notifRecentContentSvg = document.createElement('svg');
+                        var notifRecentContentIVInnerI = document.createElement('i');
+                          var notifRecentContentSvg = document.createElement('img');
+                          notifRecentContentSvg.setAttribute('src', 'https://useinfluence.co/images/usericon.png');
+                        notifRecentContentIVInnerI.appendChild('notifRecentContentSvg');
                         var notifRecentContentIVSpan1 = document.createElement('span');
                         notifRecentContentIVSpan1.innerHTML = "by ";
                         var notifRecentContentIVSpan2 = document.createElement('span');
                         notifRecentContentIVSpan2.className = "FPqR12wMqJeA12wM7MM9_0";
                         notifRecentContentIVSpan2.innerHTML = "Influence";
                       notifRecentContentIV.appendChild(notifRecentContentIVSpan1);
+                      notifRecentContentIV.appendChild(notifRecentContentIVInnerI);
                       notifRecentContentIV.appendChild(notifRecentContentIVSpan2);
                     notifRecentContentContainer.appendChild(notifRecentContentI);
                     notifRecentContentContainer.appendChild(notifRecentContentII);
@@ -4191,6 +4194,10 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       var notifLiveContentContainerII = document.createElement('div');
                       notifLiveContentContainerII.className = "FPqR14UVqJeA14UV7MM9_0";
                         var text_ContainerII = document.createTextNode('Verified by ');
+                        var notifLiveContentContainerII_I = document.createElement('i');
+                          var notifLiveContentImg = document.createElement('img');
+                          notifLiveContentImg.setAttribute('src', 'https://useinfluence.co/images/verifiedicon.png');
+                        notifLiveContentContainerII_I.appendChild('notifLiveContentImg');
                         var notifLiveContentA = document.createElement('a');
                         notifLiveContentA.setAttribute('href', 'https://useinfluence.co');
                         notifLiveContentA.setAttribute('rel', 'nofollow');
@@ -4198,6 +4205,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                         var createAText = document.createTextNode('Influence');
                         notifLiveContentA.appendChild(createAText);
                       notifLiveContentContainerII.appendChild(text_ContainerII);
+                      notifLiveContentContainerII.appendChild(notifLiveContentContainerII_I);
                       notifLiveContentContainerII.appendChild(notifLiveContentA);
 
                     innerMainNotifLiveContainer.appendChild(notifLiveImgContainer);
