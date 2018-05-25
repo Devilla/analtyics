@@ -9,15 +9,22 @@ if (typeof Influence === 'undefined') {
      *
      */
     var Influence = function(options) {
+      var MaxMindGeoIp = document.createElement('script');
+      MaxMindGeoIp.setAttribute('src', '//js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js');
+      MaxMindGeoIp.setAttribute('type', 'text/javascript');
+      document.getElementsByTagName('head')[0].appendChild(MaxMindGeoIp);
+
       if (!(this instanceof Influence)) return new Influence(config);
       /**
        * New InfluenceTracker()
        * @type {{tracker}|{}}
        */
       checkCampaignActive(options.trackingId, (err, res) => {
+
         if(err)
           return;
         if(res.isActive) {
+
           tracker = new InfluenceTracker(options.trackingId);
 
           /**
@@ -186,8 +193,10 @@ if (typeof Influence === 'undefined') {
             if (typeof geoip2 !== 'undefined') {
                 geoip2.city(function(results) {
                     success({
-                        latitude:   success.location.latitude,
-                        longitude:  success.location.longitude
+                        latitude:   results.location.latitude,
+                        longitude:  results.location.longitude,
+                        city: results.city.names['en'],
+                        country: results.country.names['en']
                     });
                 }, failure, {
                     timeout:                  2000,
@@ -1138,9 +1147,11 @@ if (typeof Influence === 'undefined') {
                 }
             };
 
+            console.log(this.options.resolveGeo, "================>this.options.resolveGeo");
             // Try to obtain geo location if possible:
             if(this.options.resolveGeo) {
                 Geo.geoip(function(position) {
+                  console.log(position, "=====position");
                     self.context.geo = position;
                 });
             }
