@@ -4139,7 +4139,22 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       var notifRecentContentI = document.createElement('div');
                       notifRecentContentI.className = "FPqR2AUlqJeA2AUl7MM9_0";
                       var res_name = config.userDetails?config.userDetails.username:null;
-                      notifRecentContentI.innerHTML = res_name?res_name:"Nataila from Itaboral, RJ";
+                      var user_details = config.userDetails?
+                        config.userDetails.city && config.userDetails.country && res_name ?
+                          `${res_name} from ${config.userDetails.city}, ${config.userDetails.country}`
+                        :
+                          config.userDetails.city && res_name?
+                            `${res_name} from ${config.userDetails.city}`
+                          :
+                            config.userDetails.country && res_name?
+                              `${res_name} from ${config.userDetails.country}`
+                            :
+                              res_name?
+                                `${res_name}`
+                              :
+                                "Anonymous"
+                        : "Anonymous";
+                      notifRecentContentI.innerHTML = user_details;
                       var notifRecentContentII = document.createElement('div');
                       notifRecentContentII.className = "FPqR13BWqJeA13BW7MM9_0";
                       notifRecentContentII.innerHTML = `Recently signed up for ${config.rule.companyName}`
@@ -4152,7 +4167,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                         var notifRecentContentIVInnerI = document.createElement('i');
                           var notifRecentContentSvg = document.createElement('img');
                           notifRecentContentSvg.setAttribute('src', 'https://useinfluence.co/images/usericon.png');
-                        notifRecentContentIVInnerI.appendChild('notifRecentContentSvg');
+                        notifRecentContentIVInnerI.appendChild(notifRecentContentSvg);
                         var notifRecentContentIVSpan1 = document.createElement('span');
                         notifRecentContentIVSpan1.innerHTML = "by ";
                         var notifRecentContentIVSpan2 = document.createElement('span');
@@ -4208,7 +4223,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                         var notifLiveContentContainerII_I = document.createElement('i');
                           var notifLiveContentImg = document.createElement('img');
                           notifLiveContentImg.setAttribute('src', 'https://useinfluence.co/images/verifiedicon.png');
-                        notifLiveContentContainerII_I.appendChild('notifLiveContentImg');
+                        notifLiveContentContainerII_I.appendChild(notifLiveContentImg);
                         var notifLiveContentA = document.createElement('a');
                         notifLiveContentA.setAttribute('href', 'https://useinfluence.co');
                         notifLiveContentA.setAttribute('rel', 'nofollow');
