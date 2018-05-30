@@ -36,7 +36,6 @@ if (typeof Influence === 'undefined') {
             notifications = new Notifications(options.trackingId);
             this.notificationsInstance = notifications;
             clearInterval( notificationTimmer );
-            // do your work
           }, 100 );
 
           options = options || {};
@@ -1091,6 +1090,7 @@ if (typeof Influence === 'undefined') {
                 trackSubmissions: true
             }, this.options);
 
+
             // Always assume that Javascript is the culprit of leaving the page
             // (we'll detect and intercept clicks on links and buttons as best
             // as possible and override this assumption in these cases):
@@ -1147,11 +1147,9 @@ if (typeof Influence === 'undefined') {
                 }
             };
 
-            console.log(this.options.resolveGeo, "================>this.options.resolveGeo");
             // Try to obtain geo location if possible:
             if(this.options.resolveGeo) {
                 Geo.geoip(function(position) {
-                  console.log(position, "=====position");
                     self.context.geo = position;
                 });
             }
@@ -1264,19 +1262,27 @@ if (typeof Influence === 'undefined') {
             }
 
             // Track form submissions:
-            if(this.options.trackSubmissions) {
-                Events.onsubmit(function(e) {
-                    if (e.form) {
-                        if (!e.form.formId) {
-                            e.form.formId = Util.genGuid();
-                        }
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+            httpGetAsync(rulesUrl, (res) => {
+              response = JSON.parse(res);
+              var notificationPath = response.notificationPath;
+              notificationPath = notificationPath.filter(notifPath => notifPath.type == 'lead');
+              notificationPath = notificationPath.map(notifPath => notifPath.url);
+              if(this.options.trackSubmissions && notificationPath.indexOf(window.location.pathname) != -1) {
+                  Events.onsubmit(function(e) {
+                      if (e.form) {
+                          if (!e.form.formId) {
+                              e.form.formId = Util.genGuid();
+                          }
 
-                        self.trackLater('formsubmit', {
-                            form: Util.merge({formId: e.form.formId}, DomUtil.getFormData(e.form))
-                        });
-                    }
-                });
-            }
+                          self.trackLater('formsubmit', {
+                              form: Util.merge({formId: e.form.formId}, DomUtil.getFormData(e.form))
+                          });
+                      }
+                  });
+              }
+            });
+
             // Track form abandonments:
 
 
@@ -3869,10 +3875,11 @@ var Notifications = function(config) {
     response = JSON.parse(res);
     rule = response.rule;
     notificationPath = response.notificationPath;
-    console.log(notificationPath, "=====path");
     var splittedUrls = ["live", "identification", "journey"];
+    notificationPath = notificationPath.filter(notifPath => notifPath.type == 'display');
     notificationPath = notificationPath.map(notifPath => notifPath.url);
-    if(rule && notificationPath.indexOf(window.location.pathname) != -1) {
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if(rule && notificationPath.indexOf(window.location.pathname) != -1 && !(isMobile && rule.hideNotification)) {
       loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config);
     }
   });
@@ -3915,7 +3922,7 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
               else
                 setTimeout(function(){
                   return notificationTimeout(i, info, rule, splittedUrls, notificationPath);
-                }, ((rule.displayTime+rule.delayBetween)*(j))*1000);
+                }, ((rule.delayNotification?(Math.floor(Math.random() * 10) + 3):(rule.displayTime+rule.delayBetween))*(j))*1000);
             } else {
               j = j-1;
             }
