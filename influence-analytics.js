@@ -1262,7 +1262,7 @@ if (typeof Influence === 'undefined') {
             }
 
             // Track form submissions:
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
             httpGetAsync(rulesUrl, (res) => {
               response = JSON.parse(res);
               var notificationPath = response.notificationPath;
