@@ -237,13 +237,13 @@
 
 #FPqR3acHqJeA3acH7MM9_0 .FPqR14UVqJeA14UV7MM9_0 i {
     display: inline-block;
-    margin: -4px 2px;
+    margin: 0px 2px;
     vertical-align: middle;
     line-height: 1em;
     font-size: .75rem;
 }
 
-#FPqR3acHqJeA3acH7MM9_0 .FPqR14UVqJeA14UV7MM9_0 i svg {
+#FPqR3acHqJeA3acH7MM9_0 .FPqR14UVqJeA14UV7MM9_0 i img {
     overflow: hidden;
 }
 
@@ -265,8 +265,8 @@
 }
 
 #FPqR3dGiqJeA3dGi7MM9_0 .FPqR2B_4qJeA2B_47MM9_0 img {
-    width: 11px;
-    height: 11px;
+    width: 13px;
+    height: 14px;
     margin: 0;
     padding: 0;
     display: inline-block;
@@ -329,7 +329,8 @@ svg:not(:root) {
     margin: 0;
     padding: 0;
     border-radius: 0;
-    width: 12px;
+    width: 11px;
+    height: 13px;
 }
 
 img {
@@ -365,6 +366,7 @@ img {
     line-height: 17.5px;
     font-size: 12px;
     color: #738c98;
+    margin-bottom: -3px;
 }
 
 #FPqR2fZIqJeA2fZI7MM9_0 .FPqR3zjZqJeA3zjZ7MM9_0 .FPqR2EbCqJeA2EbC7MM9_0 .FPqR2PlWqJeA2PlW7MM9_0 {
@@ -375,10 +377,10 @@ img {
 }
 
 #FPqR2fZIqJeA2fZI7MM9_0 .FPqR3zjZqJeA3zjZ7MM9_0 .FPqR2EbCqJeA2EbC7MM9_0 .FPqR3eNuqJeA3eNu7MM9_0 {
-    margin-left: 2px;
+    margin-left: 3px;
     display: inline-block;
     position: relative;
-    padding: 3px 5px;
+    padding: 0px 0px;
     border-radius: 5px;
     z-index: 10000000;
     font-size: 10px;

@@ -9,11 +9,6 @@ if (typeof Influence === 'undefined') {
      *
      */
     var Influence = function(options) {
-      var MaxMindGeoIp = document.createElement('script');
-      MaxMindGeoIp.setAttribute('src', '//js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js');
-      MaxMindGeoIp.setAttribute('type', 'text/javascript');
-      document.getElementsByTagName('head')[0].appendChild(MaxMindGeoIp);
-
       if (!(this instanceof Influence)) return new Influence(config);
       /**
        * New InfluenceTracker()
@@ -188,20 +183,19 @@ if (typeof Influence === 'undefined') {
         var Geo = {};
 
         Geo.geoip = function(success, failure) {
-            // MaxMind GeoIP2 JavaScript API:
-            if (typeof geoip2 !== 'undefined') {
-                geoip2.city(function(results) {
-                    success({
-                        latitude:   results.location.latitude,
-                        longitude:  results.location.longitude,
-                        city: results.city.names['en'],
-                        country: results.country.names['en']
-                    });
-                }, failure, {
-                    timeout:                  2000,
-                    w3c_geolocation_disabled: true
-                });
-            }
+          httpGetAsync('https://geoip.nekudo.com/api', (res) => {
+            response = JSON.parse(res);
+            if(response)
+              success({
+                  latitude:   response.location.latitude,
+                  longitude:  response.location.longitude,
+                  city: response.city,
+                  country: response.country.name,
+                  ip: response.ip
+              });
+            else
+              failure;
+          });
         };
 
         var Util = {};
@@ -3898,7 +3892,7 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
   document.head.appendChild(MomentCDN);
 
   var j = 1;
-  var loopCheckValue = rule.loopNotification?50:3;
+  var loopCheckValue = rule.loopNotification?150:3;
   for (var i = 0; i < splittedUrls.length; i++) {
     if(j >  loopCheckValue) {
       i = 4;
@@ -3910,9 +3904,12 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
           response = JSON.parse(res);
           if (!response.message.error) {
             const info = response.message;
-            console.log(info, "=========>info");
-            if((splittedUrls[i] == 'journey' && !info.userDetails) || (splittedUrls[i] == 'identification' && info.response.hits.total == 0)) {
+            var randomDelayTime, tempRandomDelayTime = 0 ;
+            if((splittedUrls[i] == 'journey' && !info.userDetails) || (splittedUrls[i] == 'identification' && !info.response.aggregations.users.buckets.length)) {
               return;
+            }
+            if(rule.delayNotification) {
+              randomDelayTime = (Math.floor(Math.random() * 10) + 3);
             }
             if(info.configuration && info.configuration.activity) {
               if(j == 1)
@@ -3922,7 +3919,8 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
               else
                 setTimeout(function(){
                   return notificationTimeout(i, info, rule, splittedUrls, notificationPath);
-                }, ((rule.delayNotification?(Math.floor(Math.random() * 10) + 3):(rule.displayTime+rule.delayBetween))*(j))*1000);
+                }, (rule.delayNotification?(randomDelayTime + tempRandomDelayTime):((rule.displayTime+rule.delayBetween)*(j))*1000));
+              tempRandomDelayTime = randomDelayTime;
             } else {
               j = j-1;
             }
@@ -4089,6 +4087,7 @@ InfluenceTracker.prototype.tracker = function(info) {
     }
 };
 
+let k = 0;
 var Note = function Note(config, containerStyle, iconStyle) {
 
     function displayNotification(container, config) {
@@ -4117,7 +4116,6 @@ var Note = function Note(config, containerStyle, iconStyle) {
     }
 
     function notificationDisplay(type, config, containerStyle, iconStyle, alignment) {
-
       var container = document.createElement('div');
       container.setAttribute("id", "FPqR2DbIqJeA2DbI7MM9_0");
       container.style = alignment;
@@ -4137,7 +4135,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                     var notifRecentImgContainer = document.createElement('div');
                     notifRecentImgContainer.className = "FPqR1JYFqJeA1JYF7MM9_0";
                       var notifRecentImg = document.createElement('img');
-                      var res_img = config.userDetails?config.userDetails.profile_pic:null;
+                      var res_img = config.userDetails && config.userDetails[k]?config.userDetails[k].profile_pic:null;
                       notifRecentImg.setAttribute('src', res_img?res_img:"https://www.totaldenturecare.com.au/wp-content/uploads/2017/06/default-user-image-female.png");
                       notifRecentImg.style = iconStyle;
                     notifRecentImgContainer.appendChild(notifRecentImg);
@@ -4145,16 +4143,16 @@ var Note = function Note(config, containerStyle, iconStyle) {
                     notifRecentContentContainer.className = "FPqR2EbCqJeA2EbC7MM9_0";
                       var notifRecentContentI = document.createElement('div');
                       notifRecentContentI.className = "FPqR2AUlqJeA2AUl7MM9_0";
-                      var res_name = config.userDetails?config.userDetails.username:null;
-                      var user_details = config.userDetails?
-                        config.userDetails.city && config.userDetails.country && res_name ?
-                          `${res_name} from ${config.userDetails.city}, ${config.userDetails.country}`
+                      var res_name = config.userDetails && config.userDetails[k]?config.userDetails[k].username?config.userDetails[k].username:config.userDetails[k].response.json.value.form.firstname:null;
+                      var user_details = config.userDetails && config.userDetails[k]?
+                        config.userDetails[k].city && config.userDetails[k].country && res_name ?
+                          `${res_name} from ${config.userDetails[k].city}, ${config.userDetails[k].country}`
                         :
-                          config.userDetails.city && res_name?
-                            `${res_name} from ${config.userDetails.city}`
+                          config.userDetails[k].city && res_name?
+                            `${res_name} from ${config.userDetails[k].city}`
                           :
-                            config.userDetails.country && res_name?
-                              `${res_name} from ${config.userDetails.country}`
+                            config.userDetails[k].country && res_name?
+                              `${res_name} from ${config.userDetails[k].country}`
                             :
                               res_name?
                                 `${res_name}`
@@ -4164,10 +4162,10 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       notifRecentContentI.innerHTML = user_details;
                       var notifRecentContentII = document.createElement('div');
                       notifRecentContentII.className = "FPqR13BWqJeA13BW7MM9_0";
-                      notifRecentContentII.innerHTML = `Recently signed up for ${config.rule.companyName}`
+                      notifRecentContentII.innerHTML = config.configuration.contentText;
                       var notifRecentContentIII = document.createElement('div');
                       notifRecentContentIII.className = "FPqR2PlWqJeA2PlW7MM9_0";
-                      var timeStamp = config.userDetails?config.userDetails.timestamp:null;
+                      var timeStamp = config.userDetails && config.userDetails[k]?config.userDetails[k].timestamp:null;
                       notifRecentContentIII.innerHTML = timeStamp?moment(timeStamp).fromNow():"Not available ";
                       var notifRecentContentIV = document.createElement('div');
                       notifRecentContentIV.className = "FPqR3eNuqJeA3eNu7MM9_0";
@@ -4215,7 +4213,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                           var notifLiveContentSpan = document.createElement('span');
                           notifLiveContentSpan.className = "FPqR1Jr6qJeA1Jr67MM9_0";
                             var notifLiveContentInnerSpan = document.createElement('span');
-                            notifLiveContentInnerSpan.innerHTML = config.response.hits.total;
+                            notifLiveContentInnerSpan.innerHTML = config.response?config.response.aggregations.users.buckets.length:0;
                             var text_span = document.createTextNode(" people");
                           notifLiveContentSpan.appendChild(notifLiveContentInnerSpan);
                           notifLiveContentSpan.appendChild(text_span);
@@ -4268,11 +4266,11 @@ var Note = function Note(config, containerStyle, iconStyle) {
                         var notifBulkContentSpan = document.createElement('span');
                         notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
                           var notifBulkContentInnerSpan = document.createElement('span');
-                          notifBulkContentInnerSpan.innerHTML = config.response.hits.total;
+                          notifBulkContentInnerSpan.innerHTML = config.response?config.response.aggregations.users.buckets.length:0;
                           var notifBulkContentInnerText = document.createTextNode(' people');
                         notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
                         notifBulkContentSpan.appendChild(notifBulkContentInnerText);
-                        var notifBulkContentText = document.createTextNode(`signed up for ${config.rule.companyName} in the last 7 days`);
+                        var notifBulkContentText = document.createTextNode(`signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} days`);
                       notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
                       notifBulkContentInnerContainer.appendChild(notifBulkContentText);
                     notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
@@ -4289,6 +4287,12 @@ var Note = function Note(config, containerStyle, iconStyle) {
           innerDiv.appendChild(mainContainer);
         innerContainer.appendChild(innerDiv);
       container.appendChild(innerContainer);
+
+      if(type == 'journey' && config.userDetails && config.userDetails.length>k) {
+        k++;
+      } else if(type == 'journey' && config.userDetails && config.userDetails.length<=k) {
+        k = 0;
+      }
 
       displayNotification(container, config);
     }
