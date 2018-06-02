@@ -1256,7 +1256,7 @@ if (typeof Influence === 'undefined') {
             }
 
             // Track form submissions:
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406busijhro4e81'// + this.options.trackingId;
             httpGetAsync(rulesUrl, (res) => {
               response = JSON.parse(res);
               var notificationPath = response.notificationPath;
@@ -3842,7 +3842,7 @@ if (typeof Influence === 'undefined') {
 
 
 var checkCampaignActive = function(config, cb) {
-  var url = 'https://strapi.useinfluence.co/campaign/track/' + config;
+  var url = 'https://strapi.useinfluence.co/campaign/track/INF-406busijhro4e81';
   httpGetAsync(url, function(res) {
     response = JSON.parse(res);
     if(response)
@@ -3864,7 +3864,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406busijhro4e81';
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
@@ -3899,7 +3899,7 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
       return;
     }
     (function (i, j) {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-406busijhro4e81' + '?type='+splittedUrls[i];
         httpGetAsync(url, function(res) {
           response = JSON.parse(res);
           if (!response.message.error) {
@@ -3998,7 +3998,7 @@ function notificationTimeout(i, info, rule, splittedUrls, notificationPath) {
         height: ${72+panelStyle.borderWidth*2}px;
         font-family: ${panelStyle.fontFamily};
         font-Weight: ${panelStyle.fontWeight};
-        -webkit-animation: ${fadein} 0.5s, ${fadeout} ${info.rule.displayTime*1000}s;
+        -webkit-animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
         animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
       `;
       iconStyle = `border-radius: ${panelStyle.radius}px;`;
@@ -4257,7 +4257,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                     var notifBulkImgContainer = document.createElement('div');
                     notifBulkImgContainer.className = "FPqR37xpqJeA37xp7MM9_0";
                       var notifBulkImg = document.createElement('img');
-                      notifBulkImg.setAttribute('src', 'https://useproof.s3.amazonaws.com/turbo1/flamelite.svg')
+                      notifBulkImg.setAttribute('src', 'https://useinfluence.co/images/fire.png')
                     notifBulkImgContainer.appendChild(notifBulkImg);
 
                     var notifBulkContentContainer = document.createElement('div');
