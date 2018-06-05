@@ -1265,7 +1265,7 @@ if (typeof Influence === 'undefined') {
             // Track form submissions:
             if(this.options.trackSubmissions) {
               Events.onsubmit((e) => {
-                if (e.form && notificationPath.indexOf(window.location.pathname) != -1) {
+                if (e.form) {
                     if (!e.form.formId) {
                         e.form.formId = Util.genGuid();
                     }
