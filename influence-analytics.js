@@ -1256,26 +1256,27 @@ if (typeof Influence === 'undefined') {
             }
 
             // Track form submissions:
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
-            httpGetAsync(rulesUrl, (res) => {
-              response = JSON.parse(res);
-              var notificationPath = response.notificationPath;
-              notificationPath = notificationPath.filter(notifPath => notifPath.type == 'lead');
-              notificationPath = notificationPath.map(notifPath => notifPath.url);
-              if(this.options.trackSubmissions && notificationPath.indexOf(window.location.pathname) != -1) {
-                  Events.onsubmit(function(e) {
-                      if (e.form) {
-                          if (!e.form.formId) {
-                              e.form.formId = Util.genGuid();
-                          }
-
-                          self.trackLater('formsubmit', {
-                              form: Util.merge({formId: e.form.formId}, DomUtil.getFormData(e.form))
-                          });
-                      }
+            if(this.options.trackSubmissions) {
+                Events.onsubmit((e) => {
+                  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
+                  httpGetAsync(rulesUrl, (res) => {
+                    response = JSON.parse(res);
+                    var notificationPath = response.notificationPath;
+                    notificationPath = notificationPath.filter(notifPath => notifPath.type == 'lead');
+                    notificationPath = notificationPath.map(notifPath => notifPath.url);
+                    console.log(notificationPath, notificationPath.indexOf(window.location.pathname) != -1, e.form, "===========notificationpath");
+                    if (e.form && notificationPath.indexOf(window.location.pathname) != -1) {
+                        if (!e.form.formId) {
+                            e.form.formId = Util.genGuid();
+                        }
+                        self.trackLater('formsubmit', {
+                            form: Util.merge({formId: e.form.formId}, DomUtil.getFormData(e.form))
+                        });
+                    }
                   });
-              }
-            });
+                });
+            }
+
 
             // Track form abandonments:
 
