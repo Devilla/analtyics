@@ -3924,6 +3924,7 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
                   return notificationTimeout(i, info, rule, splittedUrls, notificationPath);
                 }, (rule.delayNotification?(randomDelayTime + tempRandomDelayTime):((rule.displayTime+rule.delayBetween)*(j))*1000));
               tempRandomDelayTime = randomDelayTime;
+              // console.log(i, j, ((rule.displayTime+rule.delayBetween)*(j))*1000, randomDelayTime + tempRandomDelayTime);
             } else {
               j = j-1;
             }
@@ -4293,6 +4294,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
 
       if(type == 'journey' && config.userDetails && config.userDetails.length>k) {
         k++;
+        k = k==config.userDetails.length?0:k;
       } else if(type == 'journey' && config.userDetails && config.userDetails.length<=k) {
         k = 0;
       }
