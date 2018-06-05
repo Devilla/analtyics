@@ -4274,7 +4274,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                           var notifBulkContentInnerText = document.createTextNode(' people');
                         notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
                         notifBulkContentSpan.appendChild(notifBulkContentInnerText);
-                        var notifBulkContentText = document.createTextNode(`signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} days`);
+                        var notifBulkContentText = document.createTextNode(`signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} ${config.configuration.panelStyle.selectDurationData}`);
                       notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
                       notifBulkContentInnerContainer.appendChild(notifBulkContentText);
                     notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
