@@ -1256,7 +1256,7 @@ if (typeof Influence === 'undefined') {
             }
 
             // Track form submissions:
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406busijhro4e81'// + this.options.trackingId;
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
             httpGetAsync(rulesUrl, (res) => {
               response = JSON.parse(res);
               var notificationPath = response.notificationPath;
@@ -3842,7 +3842,7 @@ if (typeof Influence === 'undefined') {
 
 
 var checkCampaignActive = function(config, cb) {
-  var url = 'https://strapi.useinfluence.co/campaign/track/INF-406busijhro4e81';
+  var url = 'https://strapi.useinfluence.co/campaign/track/' + config;
   httpGetAsync(url, function(res) {
     response = JSON.parse(res);
     if(response)
@@ -3864,7 +3864,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406busijhro4e81';
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
@@ -3899,13 +3899,16 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
       return;
     }
     (function (i, j) {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-406busijhro4e81' + '?type='+splittedUrls[i];
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
         httpGetAsync(url, function(res) {
           response = JSON.parse(res);
           if (!response.message.error) {
             const info = response.message;
             var randomDelayTime, tempRandomDelayTime = 0 ;
-            if((splittedUrls[i] == 'journey' && !info.userDetails) || (splittedUrls[i] == 'identification' && !info.response.aggregations.users.buckets.length)) {
+            if((splittedUrls[i] == 'journey' && !info.userDetails) ||
+                (splittedUrls[i] == 'identification' && !info.response.aggregations.users.buckets.length ||
+                  (splittedUrls[i] == 'live' && Number(info.configuration.panelStyle.liveVisitorCount) >= info.response.aggregations.users.buckets.length)
+              )) {
               return;
             }
             if(rule.delayNotification) {
