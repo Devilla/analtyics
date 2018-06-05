@@ -4218,7 +4218,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                           notifLiveContentSpan.className = "FPqR1Jr6qJeA1Jr67MM9_0";
                             var notifLiveContentInnerSpan = document.createElement('span');
                             notifLiveContentInnerSpan.innerHTML = config.response?config.response.aggregations.users.buckets.length:0;
-                            var text_span = document.createTextNode(" people");
+                            var text_span = document.createTextNode(` ${config.configuration.visitorText}`);
                           notifLiveContentSpan.appendChild(notifLiveContentInnerSpan);
                           notifLiveContentSpan.appendChild(text_span);
                           var text_div = document.createTextNode(" are viewing this site");
@@ -4271,7 +4271,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                         notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
                           var notifBulkContentInnerSpan = document.createElement('span');
                           notifBulkContentInnerSpan.innerHTML = config.response?config.response.aggregations.users.buckets.length:0;
-                          var notifBulkContentInnerText = document.createTextNode(' people');
+                          var notifBulkContentInnerText = document.createTextNode(` ${config.configuration.visitorText}`);
                         notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
                         notifBulkContentSpan.appendChild(notifBulkContentInnerText);
                         var notifBulkContentText = document.createTextNode(`signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} ${config.configuration.panelStyle.selectDurationData}`);
