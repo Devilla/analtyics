@@ -1068,7 +1068,7 @@ if (typeof Influence === 'undefined') {
          */
         Influence.prototype.initialize = function() {
             var self = this;
-
+            var notificationPath = [];
             this.options = Util.merge({
                 bucket:           'none',
                 breakoutUsers:    false,
@@ -1084,6 +1084,13 @@ if (typeof Influence === 'undefined') {
                 trackSubmissions: true
             }, this.options);
 
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
+            httpGetAsync(rulesUrl, (res) => {
+              response = JSON.parse(res);
+              notificationPath = response.notificationPath;
+              notificationPath = notificationPath.filter(notifPath => notifPath.type == 'lead');
+              notificationPath = notificationPath.map(notifPath => notifPath.url);
+            })
 
             // Always assume that Javascript is the culprit of leaving the page
             // (we'll detect and intercept clicks on links and buttons as best
@@ -1257,24 +1264,16 @@ if (typeof Influence === 'undefined') {
 
             // Track form submissions:
             if(this.options.trackSubmissions) {
-                Events.onsubmit((e) => {
-                  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
-                  httpGetAsync(rulesUrl, (res) => {
-                    response = JSON.parse(res);
-                    var notificationPath = response.notificationPath;
-                    notificationPath = notificationPath.filter(notifPath => notifPath.type == 'lead');
-                    notificationPath = notificationPath.map(notifPath => notifPath.url);
-                    console.log(notificationPath, notificationPath.indexOf(window.location.pathname) != -1, e.form, "===========notificationpath");
-                    if (e.form && notificationPath.indexOf(window.location.pathname) != -1) {
-                        if (!e.form.formId) {
-                            e.form.formId = Util.genGuid();
-                        }
-                        self.trackLater('formsubmit', {
-                            form: Util.merge({formId: e.form.formId}, DomUtil.getFormData(e.form))
-                        });
+              Events.onsubmit((e) => {
+                if (e.form && notificationPath.indexOf(window.location.pathname) != -1) {
+                    if (!e.form.formId) {
+                        e.form.formId = Util.genGuid();
                     }
-                  });
-                });
+                    self.trackLater('formsubmit', {
+                        form: Util.merge({formId: e.form.formId}, DomUtil.getFormData(e.form))
+                    });
+                }
+              });
             }
 
 
