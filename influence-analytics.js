@@ -3898,6 +3898,7 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
       i = 4;
       return;
     }
+
     (function (i, j) {
       var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
         httpGetAsync(url, function(res) {
@@ -3924,9 +3925,6 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
                   return notificationTimeout(i, info, rule, splittedUrls, notificationPath);
                 }, (rule.delayNotification?(randomDelayTime + tempRandomDelayTime):((rule.displayTime+rule.delayBetween)*(j))*1000));
               tempRandomDelayTime = randomDelayTime;
-              // console.log(i, j, ((rule.displayTime+rule.delayBetween)*(j))*1000, randomDelayTime + tempRandomDelayTime);
-            } else {
-              j = j-1;
             }
           } else {
             console.log('Send data to us using websocket ')
@@ -3937,8 +3935,9 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
     j++;
 
     if(i == splittedUrls.length-1) {
-      i = -1;
+      i = -2;
     }
+
   }
 }
 
