@@ -4269,7 +4269,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                         var notifBulkContentSpan = document.createElement('span');
                         notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
                           var notifBulkContentInnerSpan = document.createElement('span');
-                          notifBulkContentInnerSpan.innerHTML = config.response?config.response.aggregations.users.buckets.length:0;
+                          notifBulkContentInnerSpan.innerHTML = config.response?config.response.hits.total:0;
                           var notifBulkContentInnerText = document.createTextNode(` ${config.configuration.visitorText}`);
                         notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
                         notifBulkContentSpan.appendChild(notifBulkContentInnerText);
