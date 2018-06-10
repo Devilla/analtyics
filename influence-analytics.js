@@ -1084,7 +1084,7 @@ if (typeof Influence === 'undefined') {
                 trackSubmissions: true
             }, this.options);
 
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406jkjiji00uszj' //+ this.options.trackingId;
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
             httpGetAsync(rulesUrl, (res) => {
               response = JSON.parse(res);
               notificationPath = response.notificationPath;
@@ -3842,7 +3842,7 @@ if (typeof Influence === 'undefined') {
 
 
 var checkCampaignActive = function(config, cb) {
-  var url = 'https://strapi.useinfluence.co/campaign/track/INF-406jkjiji00uszj'// + config;
+  var url = 'https://strapi.useinfluence.co/campaign/track/' + config;
   httpGetAsync(url, function(res) {
     response = JSON.parse(res);
     if(response)
@@ -3864,7 +3864,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406jkjiji00uszj'// + config;
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
@@ -3881,7 +3881,7 @@ var Notifications = function(config) {
 
 function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config) {
   var link = document.createElement("link");
-  link.href = "./note.css";
+  link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
   link.type = "text/css";
   link.rel = "stylesheet";
   link.id = "stylesheetID";
@@ -3908,7 +3908,7 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
     }
 
     (function (i, j) {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-406jkjiji00uszj' + '?type='+splittedUrls[i];
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
         httpGetAsync(url, function(res) {
           response = JSON.parse(res);
           if (!response.message.error) {
@@ -3959,38 +3959,24 @@ function notificationTimeout(i, info, rule, splittedUrls, notificationPath) {
     switch(displayPosition) {
       case 'Bottom Right':
         alignment = "z-index: 10000; position: fixed; right: 10px; bottom: 0px;";
-        fadein = 'fadeinBottom';
-        fadeout = 'fadeoutBottom';
         break;
       case 'Bottom Left':
         alignment = "z-index: 10000; position: fixed; left: 0px; bottom: 0px;";
-        fadein = 'fadeinBottom';
-        fadeout = 'fadeoutBottom';
         break;
       case 'Bottom Center':
         alignment = "z-index: 10000; position: fixed; left: 50%; transform: translate(-50%, 0); bottom: 0px;";
-        fadein = 'fadeinBottom';
-        fadeout = 'fadeoutBottom';
         break;
       case 'Top Left':
         alignment = "z-index: 10000; position: fixed; left: 0px; top: 10px;";
-        fadein = 'fadeinTop';
-        fadeout = 'fadeoutTop';
         break;
       case 'Top Right':
         alignment = "z-index: 10000; position: fixed; right: 10px; top: 10px;";
-        fadein = 'fadeinTop';
-        fadeout = 'fadeoutTop';
         break;
       case 'Top Center':
         alignment = "z-index: 10000; position: fixed; left: 50%; transform: translate(-50%, 0); top: 10px;";
-        fadein = 'fadeinTop';
-        fadeout = 'fadeoutTop';
         break;
       default:
         alignment = "z-index: 10000; position: fixed; left: 0px; bottom: 0px;";
-        fadein = 'fadeinBottom';
-        fadeout = 'fadeoutBottom';
     }
 
 
@@ -4010,18 +3996,12 @@ function notificationTimeout(i, info, rule, splittedUrls, notificationPath) {
         height: ${72+panelStyle.borderWidth*2}px;
         font-family: ${panelStyle.fontFamily};
         font-Weight: ${panelStyle.fontWeight};
-
       `;
       iconStyle = `border-radius: ${panelStyle.radius}px;`;
     } else {
-      containerStyle = `
-        -webkit-animation: driveInBottom 0.5s, ${info.rule.displayTime*1000}s;
-        animation: driveInBottom 0.5s, ${info.rule.displayTime*1000}s;
-      `;
       iconStyle = `border-radius: 50px;`;
     }
     note.notificationdisplay(splittedUrls[i], info, containerStyle, iconStyle, alignment);
-  // }
 }
 
 function httpGetAsync(theUrl, callback) {
@@ -4113,51 +4093,6 @@ var Note = function Note(config, containerStyle, iconStyle) {
       }, (config.rule.displayTime*1000+2000));
       document.body.appendChild(container);
     };
-
-    function BottomOut(element) {
-      var op = 1;  // initial opacity
-       var y=element.offsetTop; // initial top position
-      var timer = setInterval(function () {
-        if (op <= 0.1){
-            clearInterval(timer);
-            element.style.display = 'none';
-        }
-        element.style.top= y + "px";
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        op -= op * 0.1;
-        y += y * 0.1;
-      }, 100);
-    }
-
-    function LeftOut(element) {
-      var op = 1;  // initial opacity
-       var x=element.offsetLeft; // initial left position
-      var timer = setInterval(function () {
-        if (op <= 0.1){
-            clearInterval(timer);
-            element.style.display = 'none';
-        }
-        element.style.left= x + "px";
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        op -= op * 0.1;
-        x -= x * 0.1;
-      }, 50);
-    }
-
-    function fadeOut(element) {
-      var op = 1;  // initial opacity
-      var timer = setInterval(function () {
-        if (op <= 0.1){
-            clearInterval(timer);
-            element.style.display = 'none';
-        }
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        op -= op * 0.1;
-      }, 50);
-    }
 
     function notificationDisplay(type, config, containerStyle, iconStyle, alignment) {
       var container = document.createElement('div');
