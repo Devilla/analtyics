@@ -3879,7 +3879,7 @@ var Notifications = function(config) {
   });
 };
 
-function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config) {
+async function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config) {
   var link = document.createElement("link");
   link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
   link.type = "text/css";
@@ -3900,23 +3900,38 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
   document.head.appendChild(MomentCDN);
 
   var j = 1;
+  var responseNotifications = [];
   var loopCheckValue = rule.loopNotification?150:3;
-  for (var i = 0; i < splittedUrls.length; i++) {
-    if(j >  loopCheckValue) {
-      i = 4;
-      return;
-    }
 
-    (function (i, j) {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
-        httpGetAsync(url, function(res) {
-          response = JSON.parse(res);
+  let responseNotif = (callback) => {
+    splittedUrls.map(async notifName => {
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type=' + notifName;
+      await httpGetAsync(url, function(res) {
+        response = JSON.parse(res);
+        responseNotifications.push({[notifName]: response});
+        callback(null, responseNotifications)
+      });
+    });
+  }
+
+  responseNotif((err, result) => {
+    if(result.length == 3) {
+      for (let i = 0; i < splittedUrls.length; i++) {
+        if(j >  loopCheckValue) {
+          i = 4;
+          return;
+        }
+
+        (function (i, j) {
+          var notif = responseNotifications[i];
+          var key = Object.keys(notif);
+          response = notif[splittedUrls[i]];
           if (!response.message.error) {
             const info = response.message;
             var randomDelayTime, tempRandomDelayTime = 0 ;
-            if((splittedUrls[i] == 'journey' && !info.userDetails) ||
-                (splittedUrls[i] == 'identification' && !info.response.aggregations.users.buckets.length ||
-                  (splittedUrls[i] == 'live' && Number(info.configuration.panelStyle.liveVisitorCount) >= info.response.aggregations.users.buckets.length)
+            if((key == 'journey' && !info.userDetails) ||
+                (key == 'identification' && !info.response.aggregations.users.buckets.length ||
+                  (key == 'live' && Number(info.configuration.panelStyle.liveVisitorCount) >= info.response.aggregations.users.buckets.length)
               )) {
               return;
             }
@@ -3926,30 +3941,30 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
             if(info.configuration && info.configuration.activity) {
               if(j == 1)
                 setTimeout(function(){
-                  return notificationTimeout(i, info, rule, splittedUrls, notificationPath);
+                  return notificationTimeout(i, info, rule, key, notificationPath);
                 }, (rule.initialDelay)*1000);
               else
                 setTimeout(function(){
-                  return notificationTimeout(i, info, rule, splittedUrls, notificationPath);
+                  return notificationTimeout(i, info, rule, key, notificationPath);
                 }, (rule.delayNotification?(randomDelayTime + tempRandomDelayTime):((rule.displayTime+rule.delayBetween)*(j))*1000));
               tempRandomDelayTime = randomDelayTime;
             }
           } else {
             console.log('Send data to us using websocket ')
           }
-        });
-    })(i, j);
+        })(i, j);
 
-    j++;
+        j++;
 
-    if(i == splittedUrls.length-1) {
-      i = -2;
+        if(i == splittedUrls.length-1) {
+          i = -1;
+        }
+      }
     }
-
-  }
+  });
 }
 
-function notificationTimeout(i, info, rule, splittedUrls, notificationPath) {
+function notificationTimeout(i, info, rule, key, notificationPath) {
     if(notificationPath.indexOf(window.location.pathname) === -1)
       return;
     var note = new Note({});
@@ -4001,7 +4016,7 @@ function notificationTimeout(i, info, rule, splittedUrls, notificationPath) {
     } else {
       iconStyle = `border-radius: 50px;`;
     }
-    note.notificationdisplay(splittedUrls[i], info, containerStyle, iconStyle, alignment);
+    note.notificationdisplay(key, info, containerStyle, iconStyle, alignment);
 }
 
 function httpGetAsync(theUrl, callback) {
