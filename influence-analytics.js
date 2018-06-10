@@ -1084,7 +1084,7 @@ if (typeof Influence === 'undefined') {
                 trackSubmissions: true
             }, this.options);
 
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406jkjiji00uszj' //+ this.options.trackingId;
             httpGetAsync(rulesUrl, (res) => {
               response = JSON.parse(res);
               notificationPath = response.notificationPath;
@@ -3842,7 +3842,7 @@ if (typeof Influence === 'undefined') {
 
 
 var checkCampaignActive = function(config, cb) {
-  var url = 'https://strapi.useinfluence.co/campaign/track/' + config;
+  var url = 'https://strapi.useinfluence.co/campaign/track/INF-406jkjiji00uszj'// + config;
   httpGetAsync(url, function(res) {
     response = JSON.parse(res);
     if(response)
@@ -3864,7 +3864,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406jkjiji00uszj'// + config;
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
@@ -3881,11 +3881,19 @@ var Notifications = function(config) {
 
 function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config) {
   var link = document.createElement("link");
-  link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
+  link.href = "./note.css";
   link.type = "text/css";
   link.rel = "stylesheet";
   link.id = "stylesheetID";
   document.getElementsByTagName("head")[0].appendChild(link);
+
+  var animationLink = document.createElement("link");
+  animationLink.href = "https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css";
+  animationLink.type = "text/css";
+  animationLink.rel = "stylesheet";
+  animationLink.id = "stylesheetID";
+  document.getElementsByTagName("head")[0].appendChild(animationLink);
+
 
   var MomentCDN = document.createElement('script');
   MomentCDN.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js');
@@ -3900,7 +3908,7 @@ function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, 
     }
 
     (function (i, j) {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type='+splittedUrls[i];
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-406jkjiji00uszj' + '?type='+splittedUrls[i];
         httpGetAsync(url, function(res) {
           response = JSON.parse(res);
           if (!response.message.error) {
@@ -3985,6 +3993,7 @@ function notificationTimeout(i, info, rule, splittedUrls, notificationPath) {
         fadeout = 'fadeoutBottom';
     }
 
+
     if(configuration) {
       const panelStyle = configuration.panelStyle;
       const backgroundColor = panelStyle.backgroundColor;
@@ -4001,15 +4010,15 @@ function notificationTimeout(i, info, rule, splittedUrls, notificationPath) {
         height: ${72+panelStyle.borderWidth*2}px;
         font-family: ${panelStyle.fontFamily};
         font-Weight: ${panelStyle.fontWeight};
-        -webkit-animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
-        animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
+
       `;
       iconStyle = `border-radius: ${panelStyle.radius}px;`;
     } else {
       containerStyle = `
-        -webkit-animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
-        animation: ${fadein} 0.5s, ${fadeout} 0.5s ${info.rule.displayTime*1000}s;
+        -webkit-animation: driveInBottom 0.5s, ${info.rule.displayTime*1000}s;
+        animation: driveInBottom 0.5s, ${info.rule.displayTime*1000}s;
       `;
+      iconStyle = `border-radius: 50px;`;
     }
     note.notificationdisplay(splittedUrls[i], info, containerStyle, iconStyle, alignment);
   // }
@@ -4094,16 +4103,48 @@ let k = 0;
 var Note = function Note(config, containerStyle, iconStyle) {
 
     function displayNotification(container, config) {
+      container.className =  'animated fadeInUp' ;
       setTimeout(function() {
-        // container.parentNode.removeChild(container)
-        fadeOut(container);
-
-    }, (config.rule.displayTime*1000));
+        // BottomOut(container);
+        container.className =  'animated fadeOutDown' ;
+      }, (config.rule.displayTime*1000));
       setTimeout(function() {
         container.parentNode.removeChild(container)
       }, (config.rule.displayTime*1000+2000));
       document.body.appendChild(container);
     };
+
+    function BottomOut(element) {
+      var op = 1;  // initial opacity
+       var y=element.offsetTop; // initial top position
+      var timer = setInterval(function () {
+        if (op <= 0.1){
+            clearInterval(timer);
+            element.style.display = 'none';
+        }
+        element.style.top= y + "px";
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+        y += y * 0.1;
+      }, 100);
+    }
+
+    function LeftOut(element) {
+      var op = 1;  // initial opacity
+       var x=element.offsetLeft; // initial left position
+      var timer = setInterval(function () {
+        if (op <= 0.1){
+            clearInterval(timer);
+            element.style.display = 'none';
+        }
+        element.style.left= x + "px";
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+        x -= x * 0.1;
+      }, 50);
+    }
 
     function fadeOut(element) {
       var op = 1;  // initial opacity
