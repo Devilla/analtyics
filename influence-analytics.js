@@ -3905,7 +3905,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
 
   let responseNotif = (callback) => {
     splittedUrls.map(async notifName => {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config + '?type=' + notifName;
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config  + '?type=' + notifName;
       await httpGetAsync(url, function(res) {
         response = JSON.parse(res);
         responseNotifications.push({[notifName]: response});
@@ -3925,7 +3925,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
         (function (i, j) {
           var notif = responseNotifications[i];
           var key = Object.keys(notif);
-          response = notif[splittedUrls[i]];
+          response = notif[key];
           if (!response.message.error) {
             const info = response.message;
             var randomDelayTime, tempRandomDelayTime = 0 ;
@@ -4129,7 +4129,11 @@ var Note = function Note(config, containerStyle, iconStyle) {
                     var notifRecentImgContainer = document.createElement('div');
                     notifRecentImgContainer.className = "FPqR1JYFqJeA1JYF7MM9_0";
                       var notifRecentImg = document.createElement('img');
-                      var res_img = config.userDetails && config.userDetails[k]?config.userDetails[k].profile_pic:null;
+                      // var res_img = config.userDetails && config.userDetails[k]?config.userDetails[k].profile_pic:null;
+                      var res_img = config.userDetails?
+                        `http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyAvLJlx-AEg3Q6eJmtXwXf0pDGUWtVCit8&center=28.57,77.32&zoom=12&size=200x200&scale=2&sensor=false`
+                      :
+                        null;
                       notifRecentImg.setAttribute('src', res_img?res_img:"https://www.totaldenturecare.com.au/wp-content/uploads/2017/06/default-user-image-female.png");
                       notifRecentImg.style = iconStyle;
                     notifRecentImgContainer.appendChild(notifRecentImg);
