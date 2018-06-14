@@ -3915,6 +3915,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
   }
 
   responseNotif((err, result) => {
+    let m = 4;
     if(result.length == 3) {
       for (let i = 0; i < splittedUrls.length; i++) {
         if(j >  loopCheckValue) {
@@ -3955,6 +3956,18 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
         })(i, j);
 
         j++;
+
+        if(Object.keys(responseNotifications[i]) == 'journey') {
+          if(responseNotifications[i].journey.message.userDetails.length < 16) {
+            i = 2;
+          } else if(m%8 == 0) {
+            i = 2
+            m++;
+          } else {
+            m++;
+            i = 1;
+          }
+        }
 
         if(i == splittedUrls.length-1) {
           i = -1;
@@ -4098,10 +4111,9 @@ let k = 0;
 var Note = function Note(config, containerStyle, iconStyle) {
 
     function displayNotification(container, config) {
-      container.className =  'animated fadeInUp' ;
+      container.className =  `animated ${config.rule.popupAnimationIn}` ;
       setTimeout(function() {
-        // BottomOut(container);
-        container.className =  'animated fadeOutDown' ;
+        container.className =  `animated ${config.rule.popupAnimationOut}` ;
       }, (config.rule.displayTime*1000));
       setTimeout(function() {
         container.parentNode.removeChild(container)
@@ -4131,7 +4143,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       var notifRecentImg = document.createElement('img');
                       // var res_img = config.userDetails && config.userDetails[k]?config.userDetails[k].profile_pic:null;
                       var res_img = config.userDetails?
-                        `https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyAvLJlx-AEg3Q6eJmtXwXf0pDGUWtVCit8&center=${config.userDetails.latitude},${config.userDetails.longitude}&zoom=6&scale=2&size=200x200&sensor=false`
+                        `https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyAvLJlx-AEg3Q6eJmtXwXf0pDGUWtVCit8&center=${config.userDetails[k].latitude},${config.userDetails[k].longitude}&zoom=5&scale=2&size=75x75&sensor=false`
                       :
                         null;
                       notifRecentImg.setAttribute('src', res_img?res_img:"https://www.totaldenturecare.com.au/wp-content/uploads/2017/06/default-user-image-female.png");
