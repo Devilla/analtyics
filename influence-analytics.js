@@ -4131,7 +4131,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       var notifRecentImg = document.createElement('img');
                       // var res_img = config.userDetails && config.userDetails[k]?config.userDetails[k].profile_pic:null;
                       var res_img = config.userDetails?
-                        `http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyAvLJlx-AEg3Q6eJmtXwXf0pDGUWtVCit8&center=28.57,77.32&zoom=12&size=200x200&scale=2&sensor=false`
+                        `https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyAvLJlx-AEg3Q6eJmtXwXf0pDGUWtVCit8&center=${config.userDetails.latitude},${config.userDetails.longitude}&zoom=6&scale=2&size=200x200&sensor=false`
                       :
                         null;
                       notifRecentImg.setAttribute('src', res_img?res_img:"https://www.totaldenturecare.com.au/wp-content/uploads/2017/06/default-user-image-female.png");
