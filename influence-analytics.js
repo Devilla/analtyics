@@ -1084,7 +1084,7 @@ if (typeof Influence === 'undefined') {
                 trackSubmissions: true
             }, this.options);
 
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + 'INF-406jkjiji00uszj';
             httpGetAsync(rulesUrl, (res) => {
               response = JSON.parse(res);
               notificationPath = response.notificationPath;
@@ -3842,7 +3842,7 @@ if (typeof Influence === 'undefined') {
 
 
 var checkCampaignActive = function(config, cb) {
-  var url = 'https://strapi.useinfluence.co/campaign/track/' + config;
+  var url = 'https://strapi.useinfluence.co/campaign/track/' + 'INF-406jkjiji00uszj';
   httpGetAsync(url, function(res) {
     response = JSON.parse(res);
     if(response)
@@ -3864,7 +3864,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + 'INF-406jkjiji00uszj';
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
@@ -3905,7 +3905,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
 
   let responseNotif = (callback) => {
     splittedUrls.map(async notifName => {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config  + '?type=' + notifName;
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + 'INF-406jkjiji00uszj';
       await httpGetAsync(url, function(res) {
         response = JSON.parse(res);
         responseNotifications.push({[notifName]: response});
@@ -4256,6 +4256,67 @@ var Note = function Note(config, containerStyle, iconStyle) {
                   innerInnerNotifLiveContainer.appendChild(innerMainNotifLiveContainer);
                 innerNotifLiveContainer.appendChild(innerInnerNotifLiveContainer);
               notificationLiveContainer.appendChild(innerNotifLiveContainer);
+
+
+
+
+              var notificationLiveContainer = document.createElement('div');
+              notificationLiveContainer.style = type=='live'?"display:block":"display:none";
+                var innerNotifLiveContainer = document.createElement('div');
+                innerNotifLiveContainer.setAttribute("id", "FPqR3dGiqJeA3dGi7MM9_0");
+                  var innerInnerNotifLiveContainer = document.createElement('div');
+                  innerInnerNotifLiveContainer.className = "FPqR2B_4qJeA2B_47MM9_0 rounded FPqRD2zVqJeAD2zV7MM9_0";
+                  innerInnerNotifLiveContainer.style = containerStyle;
+                    var innerMainNotifLiveContainer = document.createElement('div');
+                    innerMainNotifLiveContainer.setAttribute('id', "FPqR3acHqJeA3acH7MM9_0");
+
+                      var notifLiveImgContainer = document.createElement('div');
+                      notifLiveImgContainer.className = "FPqRH0WDqJeAH0WD7MM9_0";
+                        var notifLiveImg = document.createElement('div');
+                        notifLiveImg.className =  "FPqRh0ePqJeAh0eP7MM9_0";
+                      notifLiveImgContainer.appendChild(notifLiveImg);
+
+                      var notifLiveContentContainerI = document.createElement('div');
+                      notifLiveContentContainerI.className = "FPqR15RvqJeA15Rv7MM9_0";
+                        var notifLiveContentInnerContainer = document.createElement('div');
+                        notifLiveContentInnerContainer.className = "FPqR2fwXqJeA2fwX7MM9_0";
+                          var notifLiveContentSpan = document.createElement('span');
+                          notifLiveContentSpan.className = "FPqR1Jr6qJeA1Jr67MM9_0";
+                            var notifLiveContentInnerSpan = document.createElement('span');
+                            notifLiveContentInnerSpan.innerHTML = config.response?config.response.aggregations.users.buckets.length:0;
+                            var text_span = document.createTextNode(` ${config.configuration.visitorText}`);
+                          notifLiveContentSpan.appendChild(notifLiveContentInnerSpan);
+                          notifLiveContentSpan.appendChild(text_span);
+                          var text_div = document.createTextNode(" are viewing this site");
+                        notifLiveContentInnerContainer.appendChild(notifLiveContentSpan);
+                      notifLiveContentContainerI.appendChild(notifLiveContentInnerContainer);
+                      notifLiveContentContainerI.appendChild(text_div);
+
+                      var notifLiveContentContainerII = document.createElement('div');
+                      notifLiveContentContainerII.className = "FPqR14UVqJeA14UV7MM9_0";
+                        var text_ContainerII = document.createTextNode('Verified by ');
+                        var notifLiveContentContainerII_I = document.createElement('i');
+                          var notifLiveContentImg = document.createElement('img');
+                          notifLiveContentImg.setAttribute('src', 'http://diylogodesigns.com/blog/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png');
+                        notifLiveContentContainerII_I.appendChild(notifLiveContentImg);
+                        var notifLiveContentA = document.createElement('a');
+                        notifLiveContentA.setAttribute('href', 'https://google.com');
+                        notifLiveContentA.setAttribute('rel', 'nofollow');
+                        notifLiveContentA.setAttribute('target', '_blank');
+                        var createAText = document.createTextNode('Influence');
+                        notifLiveContentA.appendChild(createAText);
+                      notifLiveContentContainerII.appendChild(text_ContainerII);
+                      notifLiveContentContainerII.appendChild(notifLiveContentContainerII_I);
+                      notifLiveContentContainerII.appendChild(notifLiveContentA);
+
+                    innerMainNotifLiveContainer.appendChild(notifLiveImgContainer);
+                    innerMainNotifLiveContainer.appendChild(notifLiveContentContainerI);
+                    innerMainNotifLiveContainer.appendChild(notifLiveContentContainerII);
+
+                  innerInnerNotifLiveContainer.appendChild(innerMainNotifLiveContainer);
+                innerNotifLiveContainer.appendChild(innerInnerNotifLiveContainer);
+              notificationLiveContainer.appendChild(innerNotifLiveContainer);
+
 
               var notificationBulkContainer = document.createElement('div');
               notificationBulkContainer.style = type=='identification'?"display:block":"display:none";
