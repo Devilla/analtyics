@@ -3860,6 +3860,8 @@ var InfluenceTracker = function(config) {
   console.log(config);
 };
 
+//Analytics popup Settings
+
 var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
@@ -3869,7 +3871,7 @@ var Notifications = function(config) {
     response = JSON.parse(res);
     rule = response.rule;
     notificationPath = response.notificationPath;
-    var splittedUrls = ["live", "identification", "journey"];
+    var splittedUrls = ["live", "identification", "journey","review"];
     notificationPath = notificationPath.filter(notifPath => notifPath.type == 'display');
     notificationPath = notificationPath.map(notifPath => notifPath.url);
     var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -3917,11 +3919,11 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
 
 
   responseNotif((err, result) => {
-    let m = 4;
-    if(result.length == 3) {
+    let m = 5;
+    if(result.length == 4) {
       for (let i = 0; i < splittedUrls.length; i++) {
         if(j >  loopCheckValue) {
-          i = 4;
+          i = 5;
           return;
         }
 
@@ -3934,7 +3936,8 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
             var randomDelayTime, tempRandomDelayTime = 0 ;
             if((key == 'journey' && !info.userDetails) ||
                 (key == 'identification' && !info.response.aggregations.users.buckets.length ||
-                  (key == 'live' && Number(info.configuration.panelStyle.liveVisitorCount) >= info.response.aggregations.users.buckets.length)
+                  (key == 'live' && Number(info.configuration.panelStyle.liveVisitorCount) >= info.response.aggregations.users.buckets.length) ||
+                  (key == 'review' && Number(1) >= 0)  // Mock Values
               )) {
               return;
             }
@@ -4259,139 +4262,139 @@ var Note = function Note(config, containerStyle, iconStyle) {
                 innerNotifLiveContainer.appendChild(innerInnerNotifLiveContainer);
               notificationLiveContainer.appendChild(innerNotifLiveContainer);
 
-      //         var notificationBulkContainer = document.createElement('div');
-      //         notificationBulkContainer.style = type=='identification'?"display:block":"display:none";
-      //           var innerNotifBulkContainer = document.createElement('div');
-      //           innerNotifBulkContainer.setAttribute("id", "FPqR2lriqJeA2lri7MM9_0");
-      //             var innerInnerNotifBulkContainer = document.createElement('div');
-      //             innerInnerNotifBulkContainer.className = "FPqR1XogqJeA1Xog7MM9_0 FPqR27wVqJeA27wV7MM9_0";
-      //             innerInnerNotifBulkContainer.style = containerStyle;
-      //               var notifBulkImgContainer = document.createElement('div');
-      //               notifBulkImgContainer.className = "FPqR37xpqJeA37xp7MM9_0";
-      //                 var notifBulkImg = document.createElement('img');
-      //                 notifBulkImg.setAttribute('src', 'https://useinfluence.co/images/fire.png')
-      //               notifBulkImgContainer.appendChild(notifBulkImg);
-      //
-      //               var notifBulkContentContainer = document.createElement('div');
-      //               notifBulkContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
-      //                 var notifBulkContentInnerContainer = document.createElement('div');
-      //                   var notifBulkContentSpan = document.createElement('span');
-      //                   notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
-      //                     var notifBulkContentInnerSpan = document.createElement('span');
-      //                     notifBulkContentInnerSpan.innerHTML = config.response?config.response.hits.total:0;
-      //                     var notifBulkContentInnerText = document.createTextNode(` ${config.configuration.visitorText}`);
-      //                   notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
-      //                   notifBulkContentSpan.appendChild(notifBulkContentInnerText);
-      //                   var notifBulkContentText = document.createTextNode(`signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} ${config.configuration.panelStyle.selectDurationData}`);
-      //                 notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
-      //                 notifBulkContentInnerContainer.appendChild(notifBulkContentText);
-      //               notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
-      //
-      //             innerInnerNotifBulkContainer.appendChild(notifBulkImgContainer);
-      //             innerInnerNotifBulkContainer.appendChild(notifBulkContentContainer);
-      //
-      //           innerNotifBulkContainer.appendChild(innerInnerNotifBulkContainer);
-      //         notificationBulkContainer.appendChild(innerNotifBulkContainer);
-      //
-      //       mainContainer.appendChild(notificationRecentContainer);
-      //       mainContainer.appendChild(notificationLiveContainer);
-      //       mainContainer.appendChild(notificationBulkContainer);
-      //     innerDiv.appendChild(mainContainer);
-      //   innerContainer.appendChild(innerDiv);
-      // container.appendChild(innerContainer);
+              var notificationBulkContainer = document.createElement('div');
+              notificationBulkContainer.style = type=='identification'?"display:block":"display:none";
+                var innerNotifBulkContainer = document.createElement('div');
+                innerNotifBulkContainer.setAttribute("id", "FPqR2lriqJeA2lri7MM9_0");
+                  var innerInnerNotifBulkContainer = document.createElement('div');
+                  innerInnerNotifBulkContainer.className = "FPqR1XogqJeA1Xog7MM9_0 FPqR27wVqJeA27wV7MM9_0";
+                  innerInnerNotifBulkContainer.style = containerStyle;
+                    var notifBulkImgContainer = document.createElement('div');
+                    notifBulkImgContainer.className = "FPqR37xpqJeA37xp7MM9_0";
+                      var notifBulkImg = document.createElement('img');
+                      notifBulkImg.setAttribute('src', 'https://useinfluence.co/images/fire.png')
+                    notifBulkImgContainer.appendChild(notifBulkImg);
 
-      var notificationBulkContainer = document.createElement('div');
-      notificationBulkContainer.style = type=='identification'?"display:block":"display:none";
-        var innerNotifBulkContainer = document.createElement('div');
-        innerNotifBulkContainer.setAttribute("id", "FPqR2lriqJeA2lri7MM9_0");
-          var innerInnerNotifBulkContainer = document.createElement('div');
-          innerInnerNotifBulkContainer.className = "FPqR1XogqJeA1Xog7MM9_0 FPqR27wVqJeA27wV7MM9_0";
-          innerInnerNotifBulkContainer.style = containerStyle;
-            var notifBulkImgContainer = document.createElement('div');
-            notifBulkImgContainer.className = "FPqR37xpqJeA37xp7MM9_0";
-              var notifBulkImg = document.createElement('img');
-              notifBulkImg.setAttribute('src', 'http://diylogodesigns.com/blog/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background.png')
-            notifBulkImgContainer.appendChild(notifBulkImg);
+                    var notifBulkContentContainer = document.createElement('div');
+                    notifBulkContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
+                      var notifBulkContentInnerContainer = document.createElement('div');
+                        var notifBulkContentSpan = document.createElement('span');
+                        notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
+                          var notifBulkContentInnerSpan = document.createElement('span');
+                          notifBulkContentInnerSpan.innerHTML = config.response?config.response.hits.total:0;
+                          var notifBulkContentInnerText = document.createTextNode(` ${config.configuration.visitorText}`);
+                        notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
+                        notifBulkContentSpan.appendChild(notifBulkContentInnerText);
+                        var notifBulkContentText = document.createTextNode(`signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} ${config.configuration.panelStyle.selectDurationData}`);
+                      notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
+                      notifBulkContentInnerContainer.appendChild(notifBulkContentText);
+                    notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
 
-              var starRating = document.createElement('span');
-              starRating.className = "starRating";
-              var rating5 = document.createElement('input');
-              rating5.setAttribute("id", "rating5");
-              rating5.setAttribute("type", "radio");
-              rating5.setAttribute("value", "5");
-              var label5 = document.createElement('label');
-              label5.setAttribute("for", "rating5");
+                  innerInnerNotifBulkContainer.appendChild(notifBulkImgContainer);
+                  innerInnerNotifBulkContainer.appendChild(notifBulkContentContainer);
 
-              var rating4 = document.createElement('input');
-              rating4.setAttribute("id", "rating4");
-              rating4.setAttribute("type", "radio");
-              rating4.setAttribute("value", "4");
-              var label4 = document.createElement('label');
-              label4.setAttribute("for", "rating4");
+                innerNotifBulkContainer.appendChild(innerInnerNotifBulkContainer);
+              notificationBulkContainer.appendChild(innerNotifBulkContainer);
 
-              var rating3 = document.createElement('input');
-              rating3.setAttribute("id", "rating3");
-              rating3.setAttribute("type", "radio");
-              rating3.setAttribute("value", "3");
-              var label3 = document.createElement('label');
-              label3.setAttribute("for", "rating3");
+            mainContainer.appendChild(notificationRecentContainer);
+            mainContainer.appendChild(notificationLiveContainer);
+            mainContainer.appendChild(notificationBulkContainer);
+          innerDiv.appendChild(mainContainer);
+        innerContainer.appendChild(innerDiv);
+      container.appendChild(innerContainer);
 
-              var rating2 = document.createElement('input');
-              rating2.setAttribute("id", "rating2");
-              rating2.setAttribute("type", "radio");
-              rating2.setAttribute("value", "2");
-              var label2 = document.createElement('label');
-              label2.setAttribute("for", "rating2");
-
-              var rating1 = document.createElement('input');
-              rating1.setAttribute("id", "rating1");
-              rating1.setAttribute("type", "radio");
-              rating1.setAttribute("value", "1");
-              var label1 = document.createElement('label');
-              label1.setAttribute("for", "rating1");
-
-
-            var notifBulkContentContainer = document.createElement('div');
-            notifBulkContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
-              var notifBulkContentInnerContainer = document.createElement('div');
-
-                var notifBulkContentSpan = document.createElement('span');
-                notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
-                  var notifBulkContentInnerSpan = document.createElement('span');
-                  notifBulkContentInnerSpan.innerHTML = config.response?config.response.hits.total:0;
-                  var notifBulkContentInnerText = document.createTextNode(` marketer`);
-                  starRating.appendChild(label1);
-                  starRating.appendChild(rating1);
-                  starRating.appendChild(label2);
-                  starRating.appendChild(rating2);
-                  starRating.appendChild(label3);
-                  starRating.appendChild(rating3);
-                  starRating.appendChild(label4);
-                  starRating.appendChild(rating4);
-                  starRating.appendChild(label5);
-                  starRating.appendChild(rating5);
-                  notifBulkContentContainer.appendChild(starRating);
-                notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
-                notifBulkContentSpan.appendChild(notifBulkContentInnerText);
-
-                var notifBulkContentText = document.createTextNode(` reviewed us on Google`);
-
-              notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
-              notifBulkContentInnerContainer.appendChild(notifBulkContentText);
-            notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
-
-          innerInnerNotifBulkContainer.appendChild(notifBulkImgContainer);
-          innerInnerNotifBulkContainer.appendChild(notifBulkContentContainer);
-
-        innerNotifBulkContainer.appendChild(innerInnerNotifBulkContainer);
-      notificationBulkContainer.appendChild(innerNotifBulkContainer);
-
-    mainContainer.appendChild(notificationRecentContainer);
-    mainContainer.appendChild(notificationLiveContainer);
-    mainContainer.appendChild(notificationBulkContainer);
-  innerDiv.appendChild(mainContainer);
-innerContainer.appendChild(innerDiv);
-container.appendChild(innerContainer);
+//       var notificationBulkContainer = document.createElement('div');
+//       notificationBulkContainer.style = type=='identification'?"display:block":"display:none";
+//         var innerNotifBulkContainer = document.createElement('div');
+//         innerNotifBulkContainer.setAttribute("id", "FPqR2lriqJeA2lri7MM9_0");
+//           var innerInnerNotifBulkContainer = document.createElement('div');
+//           innerInnerNotifBulkContainer.className = "FPqR1XogqJeA1Xog7MM9_0 FPqR27wVqJeA27wV7MM9_0";
+//           innerInnerNotifBulkContainer.style = containerStyle;
+//             var notifBulkImgContainer = document.createElement('div');
+//             notifBulkImgContainer.className = "FPqR37xpqJeA37xp7MM9_0";
+//               var notifBulkImg = document.createElement('img');
+//               notifBulkImg.setAttribute('src', 'http://diylogodesigns.com/blog/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background.png')
+//             notifBulkImgContainer.appendChild(notifBulkImg);
+//
+//               var starRating = document.createElement('span');
+//               starRating.className = "starRating";
+//               var rating5 = document.createElement('input');
+//               rating5.setAttribute("id", "rating5");
+//               rating5.setAttribute("type", "radio");
+//               rating5.setAttribute("value", "5");
+//               var label5 = document.createElement('label');
+//               label5.setAttribute("for", "rating5");
+//
+//               var rating4 = document.createElement('input');
+//               rating4.setAttribute("id", "rating4");
+//               rating4.setAttribute("type", "radio");
+//               rating4.setAttribute("value", "4");
+//               var label4 = document.createElement('label');
+//               label4.setAttribute("for", "rating4");
+//
+//               var rating3 = document.createElement('input');
+//               rating3.setAttribute("id", "rating3");
+//               rating3.setAttribute("type", "radio");
+//               rating3.setAttribute("value", "3");
+//               var label3 = document.createElement('label');
+//               label3.setAttribute("for", "rating3");
+//
+//               var rating2 = document.createElement('input');
+//               rating2.setAttribute("id", "rating2");
+//               rating2.setAttribute("type", "radio");
+//               rating2.setAttribute("value", "2");
+//               var label2 = document.createElement('label');
+//               label2.setAttribute("for", "rating2");
+//
+//               var rating1 = document.createElement('input');
+//               rating1.setAttribute("id", "rating1");
+//               rating1.setAttribute("type", "radio");
+//               rating1.setAttribute("value", "1");
+//               var label1 = document.createElement('label');
+//               label1.setAttribute("for", "rating1");
+//
+//
+//             var notifBulkContentContainer = document.createElement('div');
+//             notifBulkContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
+//               var notifBulkContentInnerContainer = document.createElement('div');
+//
+//                 var notifBulkContentSpan = document.createElement('span');
+//                 notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
+//                   var notifBulkContentInnerSpan = document.createElement('span');
+//                   notifBulkContentInnerSpan.innerHTML = config.response?config.response.hits.total:0;
+//                   var notifBulkContentInnerText = document.createTextNode(` marketer`);
+//                   starRating.appendChild(label1);
+//                   starRating.appendChild(rating1);
+//                   starRating.appendChild(label2);
+//                   starRating.appendChild(rating2);
+//                   starRating.appendChild(label3);
+//                   starRating.appendChild(rating3);
+//                   starRating.appendChild(label4);
+//                   starRating.appendChild(rating4);
+//                   starRating.appendChild(label5);
+//                   starRating.appendChild(rating5);
+//                   notifBulkContentContainer.appendChild(starRating);
+//                 notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
+//                 notifBulkContentSpan.appendChild(notifBulkContentInnerText);
+//
+//                 var notifBulkContentText = document.createTextNode(` reviewed us on Google`);
+//
+//               notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
+//               notifBulkContentInnerContainer.appendChild(notifBulkContentText);
+//             notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
+//
+//           innerInnerNotifBulkContainer.appendChild(notifBulkImgContainer);
+//           innerInnerNotifBulkContainer.appendChild(notifBulkContentContainer);
+//
+//         innerNotifBulkContainer.appendChild(innerInnerNotifBulkContainer);
+//       notificationBulkContainer.appendChild(innerNotifBulkContainer);
+//
+//     mainContainer.appendChild(notificationRecentContainer);
+//     mainContainer.appendChild(notificationLiveContainer);
+//     mainContainer.appendChild(notificationBulkContainer);
+//   innerDiv.appendChild(mainContainer);
+// innerContainer.appendChild(innerDiv);
+// container.appendChild(innerContainer);
 
 
       if(type == 'journey' && config.userDetails && config.userDetails.length>k) {
