@@ -558,3 +558,30 @@ img {
     box-shadow: 0 0 1px rgba(0,0,0,.2), 0 1px 2px rgba(0,0,0,.05), 0 8px 50px rgba(0,0,0,.05);
   }
 }
+
+/*Star rating styles*/
+
+
+.stars-outer {
+  display: inline-block;
+  position: relative;
+  font-family: FontAwesome;
+}
+
+.stars-outer::before {
+  content: "\f006 \f006 \f006 \f006 \f006";
+}
+
+.stars-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+}
+
+.stars-inner::before {
+  content: "\f005 \f005 \f005 \f005 \f005";
+  color: #f8ce0b;
+}

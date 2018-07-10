@@ -1084,7 +1084,7 @@ if (typeof Influence === 'undefined') {
                 trackSubmissions: true
             }, this.options);
 
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + 'INF-406jkjiji00uszj';
             httpGetAsync(rulesUrl, (res) => {
               response = JSON.parse(res);
               notificationPath = response.notificationPath;
@@ -3842,7 +3842,7 @@ if (typeof Influence === 'undefined') {
 
 
 var checkCampaignActive = function(config, cb) {
-  var url = 'https://strapi.useinfluence.co/campaign/track/' + config;
+  var url = 'https://strapi.useinfluence.co/campaign/track/' +'INF-406jkjiji00uszj';
   httpGetAsync(url, function(res) {
     response = JSON.parse(res);
     if(response)
@@ -3864,7 +3864,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + 'INF-406jkjiji00uszj';
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
@@ -3881,11 +3881,24 @@ var Notifications = function(config) {
 
 async function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config) {
   var link = document.createElement("link");
-  link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
+  link.href = "./note.css";
   link.type = "text/css";
   link.rel = "stylesheet";
   link.id = "stylesheetID";
   document.getElementsByTagName("head")[0].appendChild(link);
+
+//   const ratings = {
+//   google:  4.6,
+// };
+//
+// // total number of stars
+// const starTotal = 5;
+//
+// for(const rating in ratings) {
+//   const starPercentage = (ratings[rating] / starTotal) * 100;
+//   const starPercentageRounded = `${(Math.round(starPercentage / 10) * 10)}%`;
+//   document.querySelector(`.${rating} .stars-inner`).style.width = starPercentageRounded;
+// }
 
   var animationLink = document.createElement("link");
   animationLink.href = "https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css";
@@ -3905,7 +3918,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
 
   let responseNotif = (callback) => {
     splittedUrls.map(async notifName => {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config  + '?type=' + notifName;
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + 'INF-406jkjiji00uszj' + '?type=' + notifName;
       await httpGetAsync(url, function(res) {
         response = JSON.parse(res);
         responseNotifications.push({[notifName]: response});
@@ -3913,6 +3926,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
       });
     });
   }
+
 
   responseNotif((err, result) => {
     let m = 4;
@@ -3958,7 +3972,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
         j++;
 
         if(Object.keys(responseNotifications[i]) == 'journey') {
-          if(responseNotifications[i].journey.message.userDetails.length < 16) {
+          if(responseNotifications[i].journey.message.userDetails && responseNotifications[i].journey.message.userDetails.length < 16) {
             i = 2;
           } else if(m%8 == 0) {
             i = 2
@@ -4257,46 +4271,104 @@ var Note = function Note(config, containerStyle, iconStyle) {
                 innerNotifLiveContainer.appendChild(innerInnerNotifLiveContainer);
               notificationLiveContainer.appendChild(innerNotifLiveContainer);
 
-              var notificationBulkContainer = document.createElement('div');
-              notificationBulkContainer.style = type=='identification'?"display:block":"display:none";
-                var innerNotifBulkContainer = document.createElement('div');
-                innerNotifBulkContainer.setAttribute("id", "FPqR2lriqJeA2lri7MM9_0");
-                  var innerInnerNotifBulkContainer = document.createElement('div');
-                  innerInnerNotifBulkContainer.className = "FPqR1XogqJeA1Xog7MM9_0 FPqR27wVqJeA27wV7MM9_0";
-                  innerInnerNotifBulkContainer.style = containerStyle;
-                    var notifBulkImgContainer = document.createElement('div');
-                    notifBulkImgContainer.className = "FPqR37xpqJeA37xp7MM9_0";
-                      var notifBulkImg = document.createElement('img');
-                      notifBulkImg.setAttribute('src', 'https://useinfluence.co/images/fire.png')
-                    notifBulkImgContainer.appendChild(notifBulkImg);
+      //         var notificationBulkContainer = document.createElement('div');
+      //         notificationBulkContainer.style = type=='identification'?"display:block":"display:none";
+      //           var innerNotifBulkContainer = document.createElement('div');
+      //           innerNotifBulkContainer.setAttribute("id", "FPqR2lriqJeA2lri7MM9_0");
+      //             var innerInnerNotifBulkContainer = document.createElement('div');
+      //             innerInnerNotifBulkContainer.className = "FPqR1XogqJeA1Xog7MM9_0 FPqR27wVqJeA27wV7MM9_0";
+      //             innerInnerNotifBulkContainer.style = containerStyle;
+      //               var notifBulkImgContainer = document.createElement('div');
+      //               notifBulkImgContainer.className = "FPqR37xpqJeA37xp7MM9_0";
+      //                 var notifBulkImg = document.createElement('img');
+      //                 notifBulkImg.setAttribute('src', 'https://useinfluence.co/images/fire.png')
+      //               notifBulkImgContainer.appendChild(notifBulkImg);
+      //
+      //               var notifBulkContentContainer = document.createElement('div');
+      //               notifBulkContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
+      //                 var notifBulkContentInnerContainer = document.createElement('div');
+      //                   var notifBulkContentSpan = document.createElement('span');
+      //                   notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
+      //                     var notifBulkContentInnerSpan = document.createElement('span');
+      //                     notifBulkContentInnerSpan.innerHTML = config.response?config.response.hits.total:0;
+      //                     var notifBulkContentInnerText = document.createTextNode(` ${config.configuration.visitorText}`);
+      //                   notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
+      //                   notifBulkContentSpan.appendChild(notifBulkContentInnerText);
+      //                   var notifBulkContentText = document.createTextNode(`signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} ${config.configuration.panelStyle.selectDurationData}`);
+      //                 notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
+      //                 notifBulkContentInnerContainer.appendChild(notifBulkContentText);
+      //               notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
+      //
+      //             innerInnerNotifBulkContainer.appendChild(notifBulkImgContainer);
+      //             innerInnerNotifBulkContainer.appendChild(notifBulkContentContainer);
+      //
+      //           innerNotifBulkContainer.appendChild(innerInnerNotifBulkContainer);
+      //         notificationBulkContainer.appendChild(innerNotifBulkContainer);
+      //
+      //       mainContainer.appendChild(notificationRecentContainer);
+      //       mainContainer.appendChild(notificationLiveContainer);
+      //       mainContainer.appendChild(notificationBulkContainer);
+      //     innerDiv.appendChild(mainContainer);
+      //   innerContainer.appendChild(innerDiv);
+      // container.appendChild(innerContainer);
 
-                    var notifBulkContentContainer = document.createElement('div');
-                    notifBulkContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
-                      var notifBulkContentInnerContainer = document.createElement('div');
-                        var notifBulkContentSpan = document.createElement('span');
-                        notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
-                          var notifBulkContentInnerSpan = document.createElement('span');
-                          notifBulkContentInnerSpan.innerHTML = config.response?config.response.hits.total:0;
-                          var notifBulkContentInnerText = document.createTextNode(` ${config.configuration.visitorText}`);
-                        notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
-                        notifBulkContentSpan.appendChild(notifBulkContentInnerText);
-                        var notifBulkContentText = document.createTextNode(`signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} ${config.configuration.panelStyle.selectDurationData}`);
-                      notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
-                      notifBulkContentInnerContainer.appendChild(notifBulkContentText);
-                    notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
+      var notificationBulkContainer = document.createElement('div');
+      notificationBulkContainer.style = type=='identification'?"display:block":"display:none";
+        var innerNotifBulkContainer = document.createElement('div');
+        innerNotifBulkContainer.setAttribute("id", "FPqR2lriqJeA2lri7MM9_0");
+          var innerInnerNotifBulkContainer = document.createElement('div');
+          innerInnerNotifBulkContainer.className = "FPqR1XogqJeA1Xog7MM9_0 FPqR27wVqJeA27wV7MM9_0";
+          innerInnerNotifBulkContainer.style = containerStyle;
+            var notifBulkImgContainer = document.createElement('div');
+            notifBulkImgContainer.className = "FPqR37xpqJeA37xp7MM9_0";
+              var notifBulkImg = document.createElement('img');
+              notifBulkImg.setAttribute('src', 'http://diylogodesigns.com/blog/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background.png')
+            notifBulkImgContainer.appendChild(notifBulkImg);
 
-                  innerInnerNotifBulkContainer.appendChild(notifBulkImgContainer);
-                  innerInnerNotifBulkContainer.appendChild(notifBulkContentContainer);
 
-                innerNotifBulkContainer.appendChild(innerInnerNotifBulkContainer);
-              notificationBulkContainer.appendChild(innerNotifBulkContainer);
 
-            mainContainer.appendChild(notificationRecentContainer);
-            mainContainer.appendChild(notificationLiveContainer);
-            mainContainer.appendChild(notificationBulkContainer);
-          innerDiv.appendChild(mainContainer);
-        innerContainer.appendChild(innerDiv);
-      container.appendChild(innerContainer);
+
+
+            var notifBulkContentContainer = document.createElement('div');
+            notifBulkContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
+              var notifBulkContentInnerContainer = document.createElement('div');
+
+              var starRatingOuter = document.createElement('div');
+              starRatingOuter.className = "stars-outer";
+              var starRatingInner = document.createElement('div');
+              starRatingInner.className = "stars-inner";
+
+
+                var notifBulkContentSpan = document.createElement('span');
+                notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
+                  var notifBulkContentInnerSpan = document.createElement('span');
+                  notifBulkContentInnerSpan.innerHTML = config.response?config.response.hits.total:0;
+                  var notifBulkContentInnerText = document.createTextNode(` marketer`);
+                notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
+                notifBulkContentSpan.appendChild(notifBulkContentInnerText);
+                var notifBulkContentText = document.createTextNode(`reviewed us on Google`);
+
+                starRatingOuter.appendChild(starRatingInner);
+                notifBulkContentContainer.appendChild(starRatingOuter);
+
+
+              notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
+              notifBulkContentInnerContainer.appendChild(notifBulkContentText);
+            notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
+
+          innerInnerNotifBulkContainer.appendChild(notifBulkImgContainer);
+          innerInnerNotifBulkContainer.appendChild(notifBulkContentContainer);
+
+        innerNotifBulkContainer.appendChild(innerInnerNotifBulkContainer);
+      notificationBulkContainer.appendChild(innerNotifBulkContainer);
+
+    mainContainer.appendChild(notificationRecentContainer);
+    mainContainer.appendChild(notificationLiveContainer);
+    mainContainer.appendChild(notificationBulkContainer);
+  innerDiv.appendChild(mainContainer);
+innerContainer.appendChild(innerDiv);
+container.appendChild(innerContainer);
+
 
       if(type == 'journey' && config.userDetails && config.userDetails.length>k) {
         k++;
