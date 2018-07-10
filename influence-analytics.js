@@ -3887,19 +3887,6 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
   link.id = "stylesheetID";
   document.getElementsByTagName("head")[0].appendChild(link);
 
-//   const ratings = {
-//   google:  4.6,
-// };
-//
-// // total number of stars
-// const starTotal = 5;
-//
-// for(const rating in ratings) {
-//   const starPercentage = (ratings[rating] / starTotal) * 100;
-//   const starPercentageRounded = `${(Math.round(starPercentage / 10) * 10)}%`;
-//   document.querySelector(`.${rating} .stars-inner`).style.width = starPercentageRounded;
-// }
-
   var animationLink = document.createElement("link");
   animationLink.href = "https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css";
   animationLink.type = "text/css";
@@ -3911,6 +3898,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
   var MomentCDN = document.createElement('script');
   MomentCDN.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js');
   document.head.appendChild(MomentCDN);
+
 
   var j = 1;
   var responseNotifications = [];
@@ -4325,32 +4313,68 @@ var Note = function Note(config, containerStyle, iconStyle) {
               notifBulkImg.setAttribute('src', 'http://diylogodesigns.com/blog/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background.png')
             notifBulkImgContainer.appendChild(notifBulkImg);
 
+              var starRating = document.createElement('span');
+              starRating.className = "starRating";
+              var rating5 = document.createElement('input');
+              rating5.setAttribute("id", "rating5");
+              rating5.setAttribute("type", "radio");
+              rating5.setAttribute("value", "5");
+              var label5 = document.createElement('label');
+              label5.setAttribute("for", "rating5");
 
+              var rating4 = document.createElement('input');
+              rating4.setAttribute("id", "rating4");
+              rating4.setAttribute("type", "radio");
+              rating4.setAttribute("value", "4");
+              var label4 = document.createElement('label');
+              label4.setAttribute("for", "rating4");
 
+              var rating3 = document.createElement('input');
+              rating3.setAttribute("id", "rating3");
+              rating3.setAttribute("type", "radio");
+              rating3.setAttribute("value", "3");
+              var label3 = document.createElement('label');
+              label3.setAttribute("for", "rating3");
+
+              var rating2 = document.createElement('input');
+              rating2.setAttribute("id", "rating2");
+              rating2.setAttribute("type", "radio");
+              rating2.setAttribute("value", "2");
+              var label2 = document.createElement('label');
+              label2.setAttribute("for", "rating2");
+
+              var rating1 = document.createElement('input');
+              rating1.setAttribute("id", "rating1");
+              rating1.setAttribute("type", "radio");
+              rating1.setAttribute("value", "1");
+              var label1 = document.createElement('label');
+              label1.setAttribute("for", "rating1");
 
 
             var notifBulkContentContainer = document.createElement('div');
             notifBulkContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
               var notifBulkContentInnerContainer = document.createElement('div');
 
-              var starRatingOuter = document.createElement('div');
-              starRatingOuter.className = "stars-outer";
-              var starRatingInner = document.createElement('div');
-              starRatingInner.className = "stars-inner";
-
-
                 var notifBulkContentSpan = document.createElement('span');
                 notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
                   var notifBulkContentInnerSpan = document.createElement('span');
                   notifBulkContentInnerSpan.innerHTML = config.response?config.response.hits.total:0;
                   var notifBulkContentInnerText = document.createTextNode(` marketer`);
+                  starRating.appendChild(label1);
+                  starRating.appendChild(rating1);
+                  starRating.appendChild(label2);
+                  starRating.appendChild(rating2);
+                  starRating.appendChild(label3);
+                  starRating.appendChild(rating3);
+                  starRating.appendChild(label4);
+                  starRating.appendChild(rating4);
+                  starRating.appendChild(label5);
+                  starRating.appendChild(rating5);
+                  notifBulkContentContainer.appendChild(starRating);
                 notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
                 notifBulkContentSpan.appendChild(notifBulkContentInnerText);
-                var notifBulkContentText = document.createTextNode(`reviewed us on Google`);
 
-                starRatingOuter.appendChild(starRatingInner);
-                notifBulkContentContainer.appendChild(starRatingOuter);
-
+                var notifBulkContentText = document.createTextNode(` reviewed us on Google`);
 
               notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
               notifBulkContentInnerContainer.appendChild(notifBulkContentText);
@@ -4379,7 +4403,6 @@ container.appendChild(innerContainer);
 
       displayNotification(container, config);
     }
-
     return {
         notificationdisplay: function notificationdisplay(type, config, containerStyle, iconStyle, alignment) {
           notificationDisplay(type, config, containerStyle, iconStyle, alignment);
