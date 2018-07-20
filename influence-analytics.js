@@ -1084,7 +1084,7 @@ if (typeof Influence === 'undefined') {
                 trackSubmissions: true
             }, this.options);
 
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406jkjiji00uszj'; //+ this.options.trackingId;
             httpGetAsync(rulesUrl, (res) => {
               response = JSON.parse(res);
               notificationPath = response.notificationPath;
@@ -3842,7 +3842,7 @@ if (typeof Influence === 'undefined') {
 
 
 var checkCampaignActive = function(config, cb) {
-  var url = 'https://strapi.useinfluence.co/campaign/track/' + config;
+  var url = 'https://strapi.useinfluence.co/campaign/track/INF-406jkjiji00uszj';// + config;
   httpGetAsync(url, function(res) {
     response = JSON.parse(res);
     if(response)
@@ -3864,7 +3864,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406jkjiji00uszj';// + config;
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
@@ -3888,7 +3888,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
   document.getElementsByTagName("head")[0].appendChild(link);
 
   var animationLink = document.createElement("link");
-  animationLink.href = "https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css";
+  animationLink.href = "/animate.css";
   animationLink.type = "text/css";
   animationLink.rel = "stylesheet";
   animationLink.id = "stylesheetID";
@@ -3905,7 +3905,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
 
   let responseNotif = (callback) => {
     splittedUrls.map(async notifName => {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config  + '?type=' + notifName;
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-406jkjiji00uszj' + '?type=' + notifName;
       await httpGetAsync(url, function(res) {
         response = JSON.parse(res);
         responseNotifications.push({[notifName]: response});
@@ -4111,9 +4111,9 @@ let k = 0;
 var Note = function Note(config, containerStyle, iconStyle) {
 
     function displayNotification(container, config) {
-      container.className =  `animated ${config.rule.popupAnimationIn}` ;
+      container.className =  `animated slideInUp` ;
       setTimeout(function() {
-        container.className =  `animated ${config.rule.popupAnimationOut}` ;
+        container.className =  `animated slideOutDown` ;
       }, (config.rule.displayTime*1000));
       setTimeout(function() {
         container.parentNode.removeChild(container)
